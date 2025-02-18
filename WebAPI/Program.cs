@@ -1,5 +1,6 @@
+using DAL;
 using Microsoft.EntityFrameworkCore;
-using Obiegi.DAL.Contexts;
+using WebAPI;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("AppDbContext"));
 });
 
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddApplicationServices();
 
 var app = builder.Build();
 

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Obiegi.DAL.Contexts
+namespace DAL
 {
     public class AppDbContext : DbContext
     {
