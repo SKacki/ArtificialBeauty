@@ -10,7 +10,7 @@ namespace DAL
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public int ModelId { get; set; }
+        public int? ModelId { get; set; }
         public int? Lora1Id { get; set; }
         public int? Lora2Id { get; set; }
         public decimal Lora1Weight {  get; set; }
@@ -28,12 +28,13 @@ namespace DAL
 
         // Navigation Properties
         [ForeignKey("ModelId")]
-        public Model Model { get; set; }
+        public Model? Model { get; set; }
 
         [ForeignKey("Lora1Id")]
-        public User? Lora1 { get; set; }
+        public Model? Lora1 { get; set; }
         
         [ForeignKey("Lora2Id")]
-        public User? Lora2 { get; set; }
+        public Model? Lora2 { get; set; }
+        public ICollection<Image> Images { get; set; }
     }
 }

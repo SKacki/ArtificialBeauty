@@ -11,7 +11,7 @@ namespace DAL
         public int Id { get; set; }
         public string? Title { get; set; }
         public string? Description { get; set; }
-        public ICollection<ImagesCollection> Images { get; set; }
+        public ICollection<ImagesCollection> ImagesCollection { get; set; }
 
     }
 }

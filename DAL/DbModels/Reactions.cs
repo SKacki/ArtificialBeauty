@@ -14,7 +14,7 @@ namespace DAL
         public int? CommentId { get; set; }
         public int UserId {  get; set; }
         public User User { get; set; }
-        public Image Image { get; set; }
-        public Comment Comment { get; set; }
+        public Image? Image { get; set; }
+        public Comment? Comment { get; set; }
     }
 }

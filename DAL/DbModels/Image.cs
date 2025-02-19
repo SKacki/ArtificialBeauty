@@ -16,7 +16,10 @@ namespace DAL
         public int UserId { get; set; }
         public int CommentsId { get; set; }
         public int ReactionsId { get; set; }
+        //Navigation properties
         public Metadata Metadata { get; set; }
+        public ICollection<Reaction> Reactions { get; set; }
+        public ICollection<ImagesCollection> Collections { get; set; }   
 
     }
 }

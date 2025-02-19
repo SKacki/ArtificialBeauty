@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DAL
 {
-    [Table("CurrencyHistory")]
-    public class CurrencyHistory
+    [Table("OperationsHistory")]
+    public class OperationsHistory
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
