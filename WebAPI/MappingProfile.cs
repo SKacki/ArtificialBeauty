@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using DAL;
 using Model.Models;
+using model = DAL.Model;
 
 namespace WebAPI
 {
@@ -7,8 +9,12 @@ namespace WebAPI
     {
         public MappingProfile()
         {
-            CreateMap<DAL.Model, ModelDTO>()
+            CreateMap<model, ModelDTO>()
                 .ReverseMap();
+
+            CreateMap<Metadata, MetadataDTO>()
+                .ReverseMap();
+
 
         }
     }

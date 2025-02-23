@@ -14,9 +14,6 @@ namespace WebAPI
             //Repozytoria
             services.AddScoped<IModelRepository, ModelRepository>();
 
-            //costam
-            //services.AddKeyedTransient<IAkcjaTransferu, WyslijDoPrzypisanego>(AkcjaTransferuKlucz.WYSLIJ_DO_PRZYPISANEGO);
-
             return services;
         }
     }

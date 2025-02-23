@@ -7,7 +7,7 @@ namespace DAL.Repos
     public abstract class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         protected readonly AppDbContext Context;
-        private readonly DbSet<T> _table;
+        protected readonly DbSet<T> _table;
         
         public GenericRepository(AppDbContext context)
         {

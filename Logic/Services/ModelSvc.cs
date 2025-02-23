@@ -3,6 +3,7 @@ using DAL;
 using DAL.Interfaces;
 using Logic.Interfaces;
 using Model.Models;
+using model = DAL.Model;
 
 namespace Logic
 {
@@ -20,7 +21,14 @@ namespace Logic
             _mapper = mapper;
         }
 
-        public IEnumerable<ModelDTO> GetAllModels() =>
-            _mapper.Map<IEnumerable<DAL.Model>,IEnumerable<ModelDTO>>(_modelRepo.GetAllAsIEnumerable());
+
+        public IEnumerable<ModelDTO> GetAll() =>
+            _mapper.Map<IEnumerable<model>, IEnumerable<ModelDTO>>(_modelRepo.GetAllAsIEnumerable());
+        public IEnumerable<ModelDTO> SearchByName(string searchTerm) =>
+            _mapper.Map<IEnumerable<model>, IEnumerable<ModelDTO>>(_modelRepo.GetByName(searchTerm));
+        public IEnumerable<ModelDTO> GetCheckpoints() =>
+            _mapper.Map<IEnumerable<model>, IEnumerable<ModelDTO>>(_modelRepo.GetModels());
+        public IEnumerable<ModelDTO> GetAdditionalResources() =>
+            _mapper.Map<IEnumerable<model>, IEnumerable<ModelDTO>>(_modelRepo.GetAdditionalResources());
     }
 }
