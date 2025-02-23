@@ -3,17 +3,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DAL
 {
-    [Table("OperationsHistory")]
-    public class OperationsHistory
+    [Table("Tip")]
+    public class Tip
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public int UserId {  get; set; }
-        public User User { get; set; }
+        public int ImageId {  get; set; }
         public int OperationId { get; set; }
-        public Operation Operation { get; set; }
-        public int Amount { get; set; }
-        public Tip? Tip { get; set; }
+        [ForeignKey("OperationId")]
+        public OperationsHistory Operation { get; set; }
+        public Image Image { get; set; }
     }
 }

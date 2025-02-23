@@ -8,11 +8,13 @@ namespace DAL
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int ID { get; set; }
+        public int Id { get; set; }
         public int CollectionId {  get; set; }
         public int ImageId {  get; set; }
 
-        public ICollection<Image> Images { get; set; }
-        public ICollection<Collection> Collections { get; set; }
+        [ForeignKey("ImageId")]
+        public Image Image { get; set; }
+        [ForeignKey("CollectionId")]
+        public Collection Collection { get; set; }
     }
 }

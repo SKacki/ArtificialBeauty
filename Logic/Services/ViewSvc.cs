@@ -1,36 +1,30 @@
 ﻿using AutoMapper;
-using DAL;
 using DAL.Interfaces;
 using Logic.Interfaces;
 using Model.Models;
-using model = DAL.Model;
 
 namespace Logic
 {
-    public class UserSvc : IUserSvc
+    public class ViewSvc : IViewSvc
     {
 
         private readonly IMapper _mapper;
-        private readonly IModelRepository _modelRepo;
         private readonly IUserSvc _userSvc;
-        private readonly IGeneratorSvc _generatorSvc;
 
-        public UserSvc(
+        public ViewSvc(
             IMapper mapper,
             IGeneratorSvc generatorSvc,
             IUserSvc userSvc,
             IModelRepository modelRepository)
         {
             _userSvc = userSvc;
-            _generatorSvc = generatorSvc;
-            _modelRepo = modelRepository;
             _mapper = mapper;
         }
 
-        public UserDTO GetUserById(int id)
+        public IEnumerable<ModelDTO> GetUserView(int userId)
         {
-            return new UserDTO();
+            //var result = _userSvc.
+            throw new NotImplementedException();
         }
-
     }
 }
