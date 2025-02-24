@@ -16,6 +16,10 @@ namespace WebAPI
             CreateMap<Comment,CommentDTO>()
                 .ReverseMap();
 
+            CreateMap<OperationsHistory, OperationDTO>()
+                .ForMember(o => o.Name, opt => opt.MapFrom(src => src.Operation != null ? src.Operation.Name : null))
+                .ForMember(o => o.Description, opt => opt.MapFrom(src => src.Operation != null ? src.Operation.Description : null));
+
             CreateMap<User,UserDTO>()
                 .ForMember(u => u.ImagesCount, opt => opt.MapFrom(src => src.Images.Count()))
                 .ForMember(u => u.FollowersCount, opt => opt.MapFrom(src => src.Followers.Count()))

@@ -11,17 +11,20 @@ namespace Logic
         private readonly IUserSvc _userSvc;
         private readonly IImageSvc _imageSvc;
         private readonly IModelSvc _modelSvc;
+        private readonly IOperationSvc _operationSvc;
 
         public ViewSvc(
             IMapper mapper,
             IUserSvc userSvc,
             IImageSvc imageSvc,
-            IModelSvc modelSvc)
+            IModelSvc modelSvc,
+            IOperationSvc operationSvc)
         {
             _modelSvc = modelSvc;
             _userSvc = userSvc;
             _imageSvc = imageSvc;
             _mapper = mapper;
+            _operationSvc = operationSvc;
         }
 
         public ModelViewDTO GetModelView(int modelId) 
@@ -29,5 +32,7 @@ namespace Logic
     
         public UserViewDTO GetUserView(int userId) 
             => new UserViewDTO(_userSvc.GetUserById(userId),_imageSvc.GetUserImages(userId));
+        public OperationsViewDTO GetOperationView(int userId)
+            => new OperationsViewDTO(_operationSvc.GetUserOperations(userId));
     }
 }

@@ -15,5 +15,6 @@ namespace DAL
         public Operation Operation { get; set; }
         public int Amount { get; set; }
         public Tip? Tip { get; set; }
+        public DateTime? OperationDate { get; set; }
     }
 }

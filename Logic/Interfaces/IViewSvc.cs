@@ -6,5 +6,6 @@ namespace Logic.Interfaces
     {
         public UserViewDTO GetUserView(int userId);
         public ModelViewDTO GetModelView(int modelId);
+        public OperationsViewDTO GetOperationView(int userId);
     }
 }

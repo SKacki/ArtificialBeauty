@@ -14,11 +14,13 @@ namespace WebAPI
             services.AddScoped<IModelSvc, ModelSvc>();
             services.AddScoped<IViewSvc, ViewSvc>();
             services.AddScoped<IImageSvc, ImageSvc>();
+            services.AddScoped<IOperationSvc, OperationSvc>();
             services.AddScoped<IGeneratorSvc, GeneratorSvc>();
             //Repozytoria
             services.AddScoped<IModelRepository, ModelRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IImageRepository, ImageRepository>();
+            services.AddScoped<IOperationRepository, OperationRepository>();
 
             return services;
         }
