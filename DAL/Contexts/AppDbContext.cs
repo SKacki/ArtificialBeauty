@@ -58,6 +58,11 @@ namespace DAL
                 .WithOne(o => o.Tip)
                 .OnDelete(DeleteBehavior.NoAction);
 
+            modelBuilder.Entity<Comment>()
+                .HasOne(o => o.User)
+                .WithMany(o => o.Comments)
+                .OnDelete(DeleteBehavior.NoAction);
+
         }
     }
 }

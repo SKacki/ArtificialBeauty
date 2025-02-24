@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
-using DAL.Interfaces;
 using Logic.Interfaces;
-using Model.Models;
+using Model.Models.Views;
 
 namespace Logic
 {
@@ -10,21 +9,25 @@ namespace Logic
 
         private readonly IMapper _mapper;
         private readonly IUserSvc _userSvc;
+        private readonly IImageSvc _imageSvc;
+        private readonly IModelSvc _modelSvc;
 
         public ViewSvc(
             IMapper mapper,
-            IGeneratorSvc generatorSvc,
             IUserSvc userSvc,
-            IModelRepository modelRepository)
+            IImageSvc imageSvc,
+            IModelSvc modelSvc)
         {
+            _modelSvc = modelSvc;
             _userSvc = userSvc;
+            _imageSvc = imageSvc;
             _mapper = mapper;
         }
 
-        public IEnumerable<ModelDTO> GetUserView(int userId)
-        {
-            //var result = _userSvc.
-            throw new NotImplementedException();
-        }
+        public ModelViewDTO GetModelView(int modelId) 
+            => new ModelViewDTO(_modelSvc.GetById(modelId), _imageSvc.GetModelImages(modelId));
+    
+        public UserViewDTO GetUserView(int userId) 
+            => new UserViewDTO(_userSvc.GetUserById(userId),_imageSvc.GetUserImages(userId));
     }
 }

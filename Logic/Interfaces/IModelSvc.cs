@@ -8,5 +8,6 @@ namespace Logic.Interfaces
         public IEnumerable<ModelDTO> SearchByName(string searchTerm);
         public IEnumerable<ModelDTO> GetCheckpoints();
         public IEnumerable<ModelDTO> GetAdditionalResources();
+        public ModelDTO GetById(int modelId);
     }
 }

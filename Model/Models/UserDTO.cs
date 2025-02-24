@@ -11,6 +11,5 @@
         public int ImagesCount { get; set; }
         public int Currency { get; set; }
         public string? ProfilePic { get; set; }
-        public List<string> ShowcaseImages { get; set; }
     }
 }

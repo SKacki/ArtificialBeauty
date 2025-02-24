@@ -1,6 +1,5 @@
 ﻿using Logic.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Model.Models;
 
 namespace WebAPI.Controllers
 {
@@ -23,6 +22,15 @@ namespace WebAPI.Controllers
         {
 
             var result = _viewSvc.GetUserView(userId);
+
+            return Ok(result);
+        }
+        [HttpGet("GetModelView")]
+        [Produces("application/json")]
+        public async Task<IActionResult> ModelView([FromQuery] int modelId)
+        {
+
+            var result = _viewSvc.GetModelView(modelId);
 
             return Ok(result);
         }

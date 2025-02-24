@@ -11,26 +11,23 @@ namespace Logic
     {
 
         private readonly IMapper _mapper;
-        private readonly IModelRepository _modelRepo;
-        private readonly IUserSvc _userSvc;
-        private readonly IGeneratorSvc _generatorSvc;
+        private readonly IUserRepository _userRepo;
 
         public UserSvc(
             IMapper mapper,
-            IGeneratorSvc generatorSvc,
-            IUserSvc userSvc,
-            IModelRepository modelRepository)
+            IUserRepository userRepository)
         {
-            _userSvc = userSvc;
-            _generatorSvc = generatorSvc;
-            _modelRepo = modelRepository;
+            _userRepo = userRepository;
             _mapper = mapper;
         }
 
         public UserDTO GetUserById(int id)
-        {
-            return new UserDTO();
+        { 
+            var usr =_userRepo.GetById(id);
+            return _mapper.Map<User,UserDTO>(_userRepo.GetById(id));
+
         }
+            //=> _mapper.Map<UserDTO>(_userRepo.GetById(id));
 
     }
 }

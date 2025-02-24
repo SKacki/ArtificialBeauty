@@ -4,6 +4,7 @@ using DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250224160414_CheckpointModelRefactor")]
+    partial class CheckpointModelRefactor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,7 +41,7 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Collection", (string)null);
+                    b.ToTable("Collection");
                 });
 
             modelBuilder.Entity("DAL.Comment", b =>
@@ -64,7 +67,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comment", (string)null);
+                    b.ToTable("Comment");
                 });
 
             modelBuilder.Entity("DAL.Follower", b =>
@@ -87,7 +90,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("FollowingId");
 
-                    b.ToTable("Follower", (string)null);
+                    b.ToTable("Follower");
                 });
 
             modelBuilder.Entity("DAL.Image", b =>
@@ -119,7 +122,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Images", (string)null);
+                    b.ToTable("Images");
                 });
 
             modelBuilder.Entity("DAL.ImagesCollection", b =>
@@ -142,7 +145,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("ImageId");
 
-                    b.ToTable("ImagesCollection", (string)null);
+                    b.ToTable("ImagesCollection");
                 });
 
             modelBuilder.Entity("DAL.Metadata", b =>
@@ -208,7 +211,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("ModelId");
 
-                    b.ToTable("Metadata", (string)null);
+                    b.ToTable("Metadata");
                 });
 
             modelBuilder.Entity("DAL.Model", b =>
@@ -238,7 +241,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("PublisherId");
 
-                    b.ToTable("Model", (string)null);
+                    b.ToTable("Model");
                 });
 
             modelBuilder.Entity("DAL.Operation", b =>
@@ -256,7 +259,7 @@ namespace DAL.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Operation", (string)null);
+                    b.ToTable("Operation");
                 });
 
             modelBuilder.Entity("DAL.OperationsHistory", b =>
@@ -282,7 +285,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("OperationsHistory", (string)null);
+                    b.ToTable("OperationsHistory");
                 });
 
             modelBuilder.Entity("DAL.ProfilePicture", b =>
@@ -304,7 +307,7 @@ namespace DAL.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("ProfilePicture", (string)null);
+                    b.ToTable("ProfilePicture");
                 });
 
             modelBuilder.Entity("DAL.Reaction", b =>
@@ -335,7 +338,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Reaction", (string)null);
+                    b.ToTable("Reaction");
                 });
 
             modelBuilder.Entity("DAL.Tip", b =>
@@ -359,7 +362,7 @@ namespace DAL.Migrations
                     b.HasIndex("OperationId")
                         .IsUnique();
 
-                    b.ToTable("Tip", (string)null);
+                    b.ToTable("Tip");
                 });
 
             modelBuilder.Entity("DAL.User", b =>
@@ -384,7 +387,7 @@ namespace DAL.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("User", (string)null);
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("DAL.Comment", b =>

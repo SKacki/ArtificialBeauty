@@ -1,9 +1,10 @@
-﻿using Model.Models;
+﻿using Model.Models.Views;
 
 namespace Logic.Interfaces
 {
     public interface IViewSvc
     {
-        public IEnumerable<ModelDTO> GetUserView(int userId);
+        public UserViewDTO GetUserView(int userId);
+        public ModelViewDTO GetModelView(int modelId);
     }
 }

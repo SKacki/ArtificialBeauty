@@ -9,7 +9,6 @@ namespace DAL.Repos
 
         public IEnumerable<Model> GetByName(string searchTerm) => 
             base.GetAllAsIQueryable().Where(x => x.ModelName.Contains(searchTerm)).AsEnumerable();
-
         public IEnumerable<Model> GetModels() =>
             base.GetAllAsIQueryable().Where(x => x.Type == "Checkpoint").AsEnumerable();
         public IEnumerable<Model> GetAdditionalResources() =>

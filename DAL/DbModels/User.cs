@@ -16,9 +16,11 @@ namespace DAL
         //Navigation properties
         public ProfilePicture Picture { get; set; }
         public ICollection<Image> Images { get; set; }
+        public ICollection<Comment> Comments { get; set; }
         public ICollection<Reaction> Reactions { get; set; }
         public ICollection<Follower> Followers { get; set; }
         public ICollection<Follower> Following { get; set; }
         public ICollection<OperationsHistory> OperationsHistory { get; set; }
+        public ICollection<Model> Models { get; set; }
     }
 }

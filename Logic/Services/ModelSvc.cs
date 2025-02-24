@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using DAL;
 using DAL.Interfaces;
 using Logic.Interfaces;
 using Model.Models;
@@ -22,6 +21,8 @@ namespace Logic
         }
 
 
+        public ModelDTO GetById(int modelId)
+            => _mapper.Map<ModelDTO>(_modelRepo.GetById(modelId));
         public IEnumerable<ModelDTO> GetAll() =>
             _mapper.Map<IEnumerable<model>, IEnumerable<ModelDTO>>(_modelRepo.GetAllAsIEnumerable());
         public IEnumerable<ModelDTO> SearchByName(string searchTerm) =>

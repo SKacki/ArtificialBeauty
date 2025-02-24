@@ -19,7 +19,8 @@ namespace DAL
         public User User { get; set; }
         public ICollection<Tip> Tips {  get; set; }
         public ICollection<Reaction> Reactions { get; set; }
-        public ICollection<ImagesCollection> Collections { get; set; }   
+        public ICollection<ImagesCollection> Collections { get; set; }
+        public ICollection<Comment> Comments { get; set; }
 
     }
 }

@@ -1,0 +1,10 @@
+﻿namespace Model.Models
+{
+    public class CommentDTO
+    {
+        public int Id { get; set; }
+        public int ImageId { get; set; }
+        public int? UserId { get; set; }
+        public string? CommentText { get; set; }
+    }
+}
