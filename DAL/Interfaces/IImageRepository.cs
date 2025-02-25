@@ -6,5 +6,6 @@
         public IEnumerable<Image> GetCheckpointImages(int modelId);
         public IEnumerable<Image> GetLoraImages(int modelId);
         public IEnumerable<Image> GetCollectionImages(int collectionId);
+        public Metadata GetImageMetadata(int imageId);
     }
 }

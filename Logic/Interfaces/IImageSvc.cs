@@ -7,5 +7,6 @@ namespace Logic.Interfaces
         public IEnumerable<ImageDTO> GetCheckpointImages(int modelId);
         public IEnumerable<ImageDTO> GetUserImages(int userId);
         public IEnumerable<ImageDTO> GetModelImages(int modelId);
+        public MetadataDTO GetImageMetadata(int imageId);
     }
 }

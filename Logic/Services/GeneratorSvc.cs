@@ -2,8 +2,6 @@
 using DAL.Interfaces;
 using Logic.Interfaces;
 using Model.Models;
-using System.ComponentModel.DataAnnotations;
-using model = DAL.Model;
 
 namespace Logic
 {
@@ -12,6 +10,7 @@ namespace Logic
 
         private readonly IMapper _mapper;
         private readonly IUserSvc _userSvc;
+        private readonly IImageSvc _imageSvc;
         private readonly IModelRepository _modelRepo;
         private readonly GeneratorClient _client;
         private readonly MetadataValidator _validator;
@@ -19,10 +18,12 @@ namespace Logic
         public GeneratorSvc(
             IMapper mapper,
             IUserSvc userSvc,
+            IImageSvc imageSvc,
             IModelRepository modelRepository,
             GeneratorClient genClient)
         {
             _userSvc = userSvc;
+            _imageSvc = imageSvc;
             _modelRepo = modelRepository;
             _mapper = mapper;
             _client = genClient;
@@ -37,5 +38,7 @@ namespace Logic
                 var result = _client.PostAsync<MetadataDTO>("endpoint", metadata);
             }
         }
+
+        public MetadataDTO RemixImage(int metadataId) => _imageSvc.GetImageMetadata(metadataId);
     }
 }

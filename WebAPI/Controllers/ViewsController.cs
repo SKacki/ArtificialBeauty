@@ -36,5 +36,13 @@ namespace WebAPI.Controllers
             var result = _viewSvc.GetOperationView(userId);
             return Ok(result);
         }
+        
+        [HttpGet("GetGeneratorView")]
+        [Produces("application/json")]
+        public async Task<IActionResult> GeneratorView([FromQuery] int imageId)
+        {
+            var result = _viewSvc.GetGeneratorView(imageId);
+            return Ok(result);
+        }
     }
 }

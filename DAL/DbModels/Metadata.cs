@@ -35,6 +35,6 @@ namespace DAL
         
         [ForeignKey("Lora2Id")]
         public Model? Lora2 { get; set; }
-        public ICollection<Image> Images { get; set; }
+        public Image Image { get; set; }
     }
 }

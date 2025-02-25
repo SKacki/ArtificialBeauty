@@ -40,5 +40,7 @@ namespace Logic
                 return GetLoraImages(modelId);
             }
         }
+        public MetadataDTO GetImageMetadata(int imageId) 
+            => _mapper.Map<MetadataDTO>(_imageRepo.GetImageMetadata(imageId));
     }
 }

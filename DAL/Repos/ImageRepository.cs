@@ -17,6 +17,8 @@ namespace DAL.Repos
             => Context.ImagesCollections.Include(x => x.Image)
                 .ThenInclude(x => x.Reactions).ThenInclude(x => x.Image.Tips).ThenInclude(x=>x.Image.Comments)
                 .Where(x => x.CollectionId == collectionId).Select(x=>x.Image);
+        public Metadata GetImageMetadata(int imageId) 
+            => Context.Metadata.Include(m => m.Image).SingleOrDefault(x => x.Id == imageId);
         private IQueryable<Image> GetAll()
             => GetAllAsIQueryable().Include(x => x.Metadata).Include(x => x.Reactions).Include(x => x.Tips).Include(x => x.Comments);
 
