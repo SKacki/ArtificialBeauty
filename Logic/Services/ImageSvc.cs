@@ -40,7 +40,20 @@ namespace Logic
                 return GetLoraImages(modelId);
             }
         }
+        public ImageDTO GetImageData(int imageId) 
+            => _mapper.Map<ImageDTO>(_imageRepo.GetImageData(imageId));
         public MetadataDTO GetImageMetadata(int imageId) 
             => _mapper.Map<MetadataDTO>(_imageRepo.GetImageMetadata(imageId));
+        public ImageDTO GetImage(int imageId) 
+            => _mapper.Map<ImageDTO>(_imageRepo.GetById(imageId));
+
+        public IEnumerable<ImageDTO> GetFeaturedImages()
+        {
+            var images = _imageRepo.GetAllAsIEnumerable()
+                            .Where(x => x.UploadDate != null)
+                            .OrderByDescending(x => x.UploadDate)
+                            .Take(5);
+            return _mapper.Map<IEnumerable<ImageDTO>>(images);
+        }
     }
 }

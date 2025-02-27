@@ -44,5 +44,15 @@ namespace WebAPI.Controllers
             var result = _viewSvc.GetGeneratorView(imageId);
             return Ok(result);
         }
+
+        [HttpGet("GetfeatureImages")]
+        [Produces("application/json")]
+        public async Task<IActionResult> FeatureImagesView()
+        {
+            var result = _viewSvc.GetFeatureImagesView();
+            return Ok(result);
+        }
+
+
     }
 }

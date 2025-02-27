@@ -31,15 +31,18 @@ namespace Logic
         }
 
         public ModelViewDTO GetModelView(int modelId) 
-            => new ModelViewDTO(_modelSvc.GetById(modelId), _imageSvc.GetModelImages(modelId));
+            => new(_modelSvc.GetById(modelId), _imageSvc.GetModelImages(modelId));
     
         public UserViewDTO GetUserView(int userId) 
-            => new UserViewDTO(_userSvc.GetUserById(userId),_imageSvc.GetUserImages(userId));
+            => new(_userSvc.GetUserById(userId),_imageSvc.GetUserImages(userId));
         public OperationsViewDTO GetOperationView(int userId)
-            => new OperationsViewDTO(_operationSvc.GetUserOperations(userId));
+            => new(_operationSvc.GetUserOperations(userId));
 
         public GeneratorViewDTO GetGeneratorView(int metadataId) 
             => metadataId>0 ? new GeneratorViewDTO(_generatorSvc.RemixImage(metadataId)) : new GeneratorViewDTO();
+
+        public FeatureImagesView GetFeatureImagesView()
+            => new(_imageSvc.GetFeaturedImages());
         
     }
 }

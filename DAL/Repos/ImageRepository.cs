@@ -8,7 +8,6 @@ namespace DAL.Repos
         public ImageRepository(AppDbContext context) : base(context) { }
         public IEnumerable<Image> GetCheckpointImages(int modelId)
             => GetAll().Where(x=>x.Metadata.ModelId == modelId && x.UploadDate != null);
-            
         public IEnumerable<Image> GetLoraImages(int modelId)
             => GetAll().Where(x => (x.Metadata.Lora1Id == modelId || x.Metadata.Lora2Id == modelId) && x.UploadDate != null);
         public IEnumerable<Image> GetUserImages(int userId)
@@ -19,8 +18,12 @@ namespace DAL.Repos
                 .Where(x => x.CollectionId == collectionId).Select(x=>x.Image);
         public Metadata GetImageMetadata(int imageId) 
             => Context.Metadata.Include(m => m.Image).SingleOrDefault(x => x.Id == imageId);
+        public Image GetImageData(int imageId) 
+            => GetAll().SingleOrDefault(x => x.Id == imageId);
         private IQueryable<Image> GetAll()
-            => GetAllAsIQueryable().Include(x => x.Metadata).Include(x => x.Reactions).Include(x => x.Tips).Include(x => x.Comments);
+            => GetAllAsIQueryable().Include(x => x.Metadata).Include(x => x.Reactions).Include(x => x.Tips).Include(x => x.Comments).Include(x=>x.User);
+        public override IEnumerable<Image> GetAllAsIEnumerable() 
+            => GetAll().AsEnumerable();
 
     }
 }

@@ -1,11 +1,7 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Logic.Configs;
+using Microsoft.Extensions.Options;
 using System.Text;
 using System.Text.Json;
-
-public class GeneratorServerSettings
-{
-    public string BaseUrl { get; set; }
-}
 
 public class GeneratorClient
 {

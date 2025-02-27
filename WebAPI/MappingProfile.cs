@@ -14,6 +14,7 @@ namespace WebAPI
             CreateMap<Metadata, MetadataDTO>()
                 .ReverseMap();
             CreateMap<Comment,CommentDTO>()
+                .ForMember(i => i.UserName, opt => opt.MapFrom(src => src.User.UserName))
                 .ReverseMap();
 
             CreateMap<OperationsHistory, OperationDTO>()
@@ -29,7 +30,9 @@ namespace WebAPI
             CreateMap<Image, ImageDTO>()
                 .ForMember(i => i.Tips, opt => opt.MapFrom(src => src.Tips != null ? src.Tips.Sum(x => x.Operation.Amount) : 0))
                 .ForMember(i => i.Likes, opt => opt.MapFrom(src => src.Reactions != null ? src.Reactions.Count(x => x.Type == 1) : 0))
-                .ForMember(i => i.Dislikes, opt => opt.MapFrom(src => src.Reactions != null ? src.Reactions.Count(x => x.Type == -1) : 0));
+                .ForMember(i => i.Dislikes, opt => opt.MapFrom(src => src.Reactions != null ? src.Reactions.Count(x => x.Type == -1) : 0))
+                .ForMember(i => i.CommentsCount, opt => opt.MapFrom(src => src.Comments != null ? src.Comments.Count() : 0))
+                .ForMember(i => i.UserName, opt => opt.MapFrom(src => src.User.UserName));
         }
     }
 }

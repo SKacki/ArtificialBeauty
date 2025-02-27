@@ -1,4 +1,6 @@
 using DAL;
+using Logic.Configs;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WebAPI;
 
@@ -11,14 +13,26 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("AppDbContext"));
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowLocalhost",
+        policy => policy.SetIsOriginAllowed(origin =>
+                    new Uri(origin).Host == "localhost")
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials());
+});
+
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.Configure<GeneratorServerSettings>(builder.Configuration.GetSection("GeneratorServerSettings"));
+builder.Services.Configure<ImageRepositorySettings>(builder.Configuration.GetSection("ImageRepositorySettings"));
 builder.Services.AddHttpClient<GeneratorClient>();
 builder.Services.AddApplicationServices();
 
@@ -32,9 +46,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
-
+app.UseCors("AllowLocalhost");
 app.Run();

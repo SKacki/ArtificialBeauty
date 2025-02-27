@@ -12,11 +12,14 @@ namespace WebAPI.Controllers
     {
         //private readonly ILogger<HomeForecastController> _logger = logger;
         private readonly IModelSvc _modelSvc;
+        private readonly IGeneratorSvc _generatorSvc;
+        private readonly IImageSvc _imageSvc;
 
-        public GeneratorController(IModelSvc modelSvc)
-        { 
+        public GeneratorController(IModelSvc modelSvc, IGeneratorSvc generatorSvc, IImageSvc imageSvc)
+        {
             _modelSvc = modelSvc;
-        
+            _generatorSvc = generatorSvc;
+            _imageSvc = imageSvc;
         }
 
         [HttpGet("test")]
@@ -28,19 +31,18 @@ namespace WebAPI.Controllers
             return Ok();
         }
 
-        [HttpGet("GetImage/{imageName}")]
-        public async Task<IActionResult> GetImage(string imageName)
+        [HttpGet("GetImage")]
+        public async Task<IActionResult> GetImage(int imageId)
         {
-            var imagePath = Path.Combine("C:\\NFOSIGW\\ArtificialBeauty\\Images", "9f2d3a5b-1c4e-4d8f-8a68-3e2b1d6f5c7e.png");
+            var img = _generatorSvc.GetImage(imageId);
+            return File(img, "image/png");
+        }
 
-            if (!System.IO.File.Exists(imagePath))
-            {
-                return BadRequest("Image not found");
-            }
-
-            var imageBytes = System.IO.File.ReadAllBytes(imagePath);
-
-            return File(imageBytes, "image/png");
+        [HttpGet("GetImageData")]
+        public async Task<IActionResult> GetImageData(int imageId)
+        {
+            var imgData = _imageSvc.GetImageData(imageId);
+            return Ok(imgData);
         }
 
         [HttpPost("GenerateImage")]
@@ -50,5 +52,19 @@ namespace WebAPI.Controllers
             return Ok("test");
         }
 
+        [HttpGet("HealthCheck")]
+        [Produces("application/json")]
+        public async Task<IActionResult> HealthCheck([FromQuery] int code)
+        {
+            var result = new MyClass() { Res = "OK", Code = code };
+            return Ok(result);
+        }
+    }
+
+    public class MyClass
+    {
+        public string Res {  get; set; }
+        public int Code { get; set; }
+        
     }
 }
