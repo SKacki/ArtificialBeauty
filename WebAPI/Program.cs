@@ -18,6 +18,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("AppDbContext"));
 });
+builder.Services.AddDbContext<AuthDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("AppDbContext"));
+});
 
 builder.Services.AddCors(options =>
 {
@@ -30,6 +34,8 @@ builder.Services.AddCors(options =>
 });
 
 
+builder.Services.AddAuthorization();
+builder.Services.AddIdentityApiEndpoints<IdentityUser>().AddEntityFrameworkStores<AuthDbContext>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.Configure<GeneratorServerSettings>(builder.Configuration.GetSection("GeneratorServerSettings"));
 builder.Services.Configure<ImageRepositorySettings>(builder.Configuration.GetSection("ImageRepositorySettings"));
@@ -45,6 +51,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.MapIdentityApi<IdentityUser>();
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
