@@ -11,5 +11,8 @@ namespace Logic.Interfaces
         public ImageDTO GetImage(int imageId);
         public ImageDTO GetImageData(int imageId);
         public IEnumerable<ImageDTO> GetFeaturedImages();
+        public byte[] GetImage(Guid imageId);
+        public void PostReaction(int imageId, int userId, int type);
+        public void PostComment(int imageId, int userId, string comment);
     }
 }

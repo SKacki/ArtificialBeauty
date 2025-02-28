@@ -1,5 +1,6 @@
 using DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace DAL.Repos
 {
@@ -20,10 +21,24 @@ namespace DAL.Repos
             => Context.Metadata.Include(m => m.Image).SingleOrDefault(x => x.Id == imageId);
         public Image GetImageData(int imageId) 
             => GetAll().SingleOrDefault(x => x.Id == imageId);
-        private IQueryable<Image> GetAll()
-            => GetAllAsIQueryable().Include(x => x.Metadata).Include(x => x.Reactions).Include(x => x.Tips).Include(x => x.Comments).Include(x=>x.User);
         public override IEnumerable<Image> GetAllAsIEnumerable() 
             => GetAll().AsEnumerable();
+        public override IEnumerable<Image> GetWhere(Expression<Func<Image, bool>> predicate)
+            => GetAll().Where(predicate);
 
+        public void PostReaction(Reaction reaction)
+        {
+            Context.Reactions.Add(reaction);
+            base.SaveChanges();
+        }
+
+        public void PostComment(Comment comment)
+        {
+            Context.Comments.Add(comment);
+            base.SaveChanges();
+        }
+
+        private IQueryable<Image> GetAll()
+            => GetAllAsIQueryable().Include(x => x.Metadata).Include(x=>x.User).Include(x => x.Comments).ThenInclude(x => x.User).Include(x => x.Reactions).Include(x => x.Tips).ThenInclude(x=>x.Operation);
     }
 }

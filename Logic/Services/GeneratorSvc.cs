@@ -15,7 +15,6 @@ namespace Logic
         private readonly IImageSvc _imageSvc;
         private readonly IModelRepository _modelRepo;
         private readonly GeneratorClient _client;
-        private readonly string _repoPath;
         private readonly MetadataValidator _validator;
 
         public GeneratorSvc(
@@ -23,8 +22,7 @@ namespace Logic
             IUserSvc userSvc,
             IImageSvc imageSvc,
             IModelRepository modelRepository,
-            GeneratorClient genClient,
-            IOptions<ImageRepositorySettings> options)
+            GeneratorClient genClient)
         {
             _userSvc = userSvc;
             _imageSvc = imageSvc;
@@ -32,7 +30,6 @@ namespace Logic
             _mapper = mapper;
             _client = genClient;
             _validator = new MetadataValidator();
-            _repoPath = options.Value.Path;
         }
 
         public void RequestGeneration(MetadataDTO metadata)
@@ -43,16 +40,6 @@ namespace Logic
             }
         }
         public MetadataDTO RemixImage(int metadataId) => _imageSvc.GetImageMetadata(metadataId);
-        public byte[] GetImage(int imageId)
-        {
-            var img = _imageSvc.GetImage(imageId);
-            var imagePath = Path.Combine(_repoPath, string.Concat(img.Ref.ToString(), ".png"));
 
-            if (!File.Exists(imagePath))
-            {
-                throw new Exception("Image not found");
-            }
-            return File.ReadAllBytes(imagePath);
-        }
     }
 }

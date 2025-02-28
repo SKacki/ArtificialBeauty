@@ -6,6 +6,14 @@ namespace DAL
     [Table("Comment")]
     public class Comment
     {
+        public Comment() { }
+        public Comment(int imageId, int userId, string comment) 
+        {
+            ImageId = imageId;
+            UserId = userId;
+            CommentText = comment;
+            CreatedDate = DateTime.Now;
+        }
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }

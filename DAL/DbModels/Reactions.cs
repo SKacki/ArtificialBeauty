@@ -6,6 +6,13 @@ namespace DAL
     [Table("Reaction")]
     public class Reaction
     {
+        public Reaction() { }
+        public Reaction(int type, int imageId, int userId) 
+        {
+            Type = type;
+            ImageId = imageId;
+            UserId = userId;
+        }
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }

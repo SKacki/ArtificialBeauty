@@ -12,5 +12,6 @@ namespace DAL
         public string Name { get; set; }
         public string Description { get; set; }
         public ICollection<OperationsHistory> OperationsHistory { get; set; }
+        public OperationValue Value { get; set; }
     }
 }

@@ -20,6 +20,7 @@ namespace DAL
         public DbSet<Reaction> Reactions { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Tip> Tips { get; set; }
+        public DbSet<OperationValue> OperationValues { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

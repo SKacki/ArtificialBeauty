@@ -6,6 +6,15 @@ namespace DAL
     [Table("OperationsHistory")]
     public class OperationsHistory
     {
+        public OperationsHistory() { }
+        public OperationsHistory(int userId, int operationId, int amount) 
+        {
+            UserId = userId;
+            OperationId = operationId;   
+            Amount = amount;
+            OperationDate = DateTime.Now;
+        }
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }

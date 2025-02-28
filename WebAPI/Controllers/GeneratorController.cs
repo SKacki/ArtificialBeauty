@@ -11,38 +11,11 @@ namespace WebAPI.Controllers
     public class GeneratorController : ControllerBase
     {
         //private readonly ILogger<HomeForecastController> _logger = logger;
-        private readonly IModelSvc _modelSvc;
         private readonly IGeneratorSvc _generatorSvc;
-        private readonly IImageSvc _imageSvc;
 
-        public GeneratorController(IModelSvc modelSvc, IGeneratorSvc generatorSvc, IImageSvc imageSvc)
+        public GeneratorController(IGeneratorSvc generatorSvc)
         {
-            _modelSvc = modelSvc;
             _generatorSvc = generatorSvc;
-            _imageSvc = imageSvc;
-        }
-
-        [HttpGet("test")]
-        [Produces("application/json")]
-        public async Task<IActionResult> Get()
-        {
-            //var result = _modelSvc.GetByName("BBC");
-
-            return Ok();
-        }
-
-        [HttpGet("GetImage")]
-        public async Task<IActionResult> GetImage(int imageId)
-        {
-            var img = _generatorSvc.GetImage(imageId);
-            return File(img, "image/png");
-        }
-
-        [HttpGet("GetImageData")]
-        public async Task<IActionResult> GetImageData(int imageId)
-        {
-            var imgData = _imageSvc.GetImageData(imageId);
-            return Ok(imgData);
         }
 
         [HttpPost("GenerateImage")]

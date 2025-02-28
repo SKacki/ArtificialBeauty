@@ -8,5 +8,7 @@
         public IEnumerable<Image> GetCollectionImages(int collectionId);
         public Metadata GetImageMetadata(int imageId);
         public Image GetImageData(int imageId);
+        public void PostReaction(Reaction reaction);
+        public void PostComment(Comment comment);
     }
 }

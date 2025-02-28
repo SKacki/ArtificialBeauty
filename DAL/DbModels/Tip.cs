@@ -6,6 +6,12 @@ namespace DAL
     [Table("Tip")]
     public class Tip
     {
+        public Tip() { }
+        public Tip(int imageId,int operationId) 
+        { 
+            ImageId = imageId;
+            OperationId = operationId;
+        }
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
