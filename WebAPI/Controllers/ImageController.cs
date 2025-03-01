@@ -27,6 +27,13 @@ namespace WebAPI.Controllers
             return File(img, "image/png");
         }
 
+        [HttpGet("GetImageById")]
+        public async Task<IActionResult> GetImageById([FromQuery] int imageId)
+        {
+            var img = _imageSvc.GetImage(imageId);
+            return File(img, "image/png");
+        }
+
         [HttpGet("GetImageData")]
         public async Task<IActionResult> GetImageData(int imageId)
         {

@@ -2,7 +2,6 @@
 using DAL.Interfaces;
 using Logic.Configs;
 using Logic.Interfaces;
-using Microsoft.Extensions.Options;
 using Model.Models;
 
 namespace Logic

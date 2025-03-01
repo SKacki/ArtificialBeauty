@@ -3,8 +3,13 @@
     public class MetadataDTO
     {
         public int ModelId { get; set; }
+        public string ModelName { get; set; }
         public int? Lora1Id { get; set; }
+        public string Lora1Name { get; set; }
+        public string Lora1Type { get; set; }
         public int? Lora2Id { get; set; }
+        public string Lora2Name { get; set; }
+        public string Lora2Type { get; set; }
         public decimal? Lora1Weight { get; set; }
         public decimal? Lora2Weight { get; set; }
         public string Sampler { get; set; }

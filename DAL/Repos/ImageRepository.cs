@@ -39,6 +39,13 @@ namespace DAL.Repos
         }
 
         private IQueryable<Image> GetAll()
-            => GetAllAsIQueryable().Include(x => x.Metadata).Include(x=>x.User).Include(x => x.Comments).ThenInclude(x => x.User).Include(x => x.Reactions).Include(x => x.Tips).ThenInclude(x=>x.Operation);
+            => GetAllAsIQueryable()
+                .Include(x => x.Metadata).ThenInclude(x=>x.Model)
+                .Include(x=>x.Metadata).ThenInclude(x=>x.Lora1)
+                .Include(x => x.Metadata).ThenInclude(x => x.Lora2)
+                .Include(x=>x.User)
+                .Include(x => x.Comments).ThenInclude(x => x.User)
+                .Include(x => x.Reactions)
+                .Include(x => x.Tips).ThenInclude(x=>x.Operation);
     }
 }

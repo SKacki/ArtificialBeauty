@@ -8,10 +8,10 @@ namespace Logic.Interfaces
         public IEnumerable<ImageDTO> GetUserImages(int userId);
         public IEnumerable<ImageDTO> GetModelImages(int modelId);
         public MetadataDTO GetImageMetadata(int imageId);
-        public ImageDTO GetImage(int imageId);
         public ImageDTO GetImageData(int imageId);
         public IEnumerable<ImageDTO> GetFeaturedImages();
         public byte[] GetImage(Guid imageId);
+        public byte[] GetImage(int imageId);
         public void PostReaction(int imageId, int userId, int type);
         public void PostComment(int imageId, int userId, string comment);
     }

@@ -52,8 +52,6 @@ namespace Logic
             => _mapper.Map<ImageDTO>(_imageRepo.GetImageData(imageId));
         public MetadataDTO GetImageMetadata(int imageId) 
             => _mapper.Map<MetadataDTO>(_imageRepo.GetImageMetadata(imageId));
-        public ImageDTO GetImage(int imageId) 
-            => _mapper.Map<ImageDTO>(_imageRepo.GetById(imageId));
 
         public IEnumerable<ImageDTO> GetFeaturedImages()
         {
@@ -75,6 +73,18 @@ namespace Logic
             return File.ReadAllBytes(imagePath);
         }
 
+        public byte[] GetImage(int imageId)
+        {
+            var imageRef = _imageRepo.GetById(imageId).Ref;
+            var imagePath = Path.Combine(_repoPath, string.Concat(imageRef.ToString(), ".png"));
+
+            if (!File.Exists(imagePath))
+            {
+                throw new Exception("Image not found");
+            }
+            return File.ReadAllBytes(imagePath);
+        }
+
         public void PostReaction(int imageId, int userId, int type)
         {
             var image =_imageRepo.GetWhere(x => x.Id == imageId).SingleOrDefault();
@@ -84,7 +94,6 @@ namespace Logic
                 _operationSvc.GiveInteractionRewards(userId, image.UserId);
             }
         }
-
         public void PostComment(int imageId, int userId, string comment)
         {
             _imageRepo.PostComment(new(imageId, userId, comment));

@@ -11,8 +11,22 @@ namespace WebAPI
         {
             CreateMap<model, ModelDTO>()
                 .ReverseMap();
+
+            CreateMap<GenerationRequestDTO,MetadataDTO>()
+                .ForMember(dest => dest.Lora1Weight, opt => opt.Equals(1))
+                .ForMember(dest => dest.Lora2Weight, opt => opt.Equals(1))
+                .ForMember(dest => dest.Height, opt => opt.Equals(1216))
+                .ForMember(dest => dest.Width, opt => opt.Equals(832))
+                .ForMember(dest => dest.GenDate, opt => opt.Equals(DateTime.Now));
+
             CreateMap<Metadata, MetadataDTO>()
+                .ForMember(dest => dest.ModelName, opt => opt.MapFrom(src => src.Model != null ? src.Model.ModelName : null))
+                .ForMember(dest => dest.Lora1Name, opt => opt.MapFrom(src => src.Lora1 != null ? src.Lora1.ModelName : null))
+                .ForMember(dest => dest.Lora1Type, opt => opt.MapFrom(src => src.Lora1 != null ? src.Lora1.Type : null))
+                .ForMember(dest => dest.Lora2Name, opt => opt.MapFrom(src => src.Lora2 != null ? src.Lora2.ModelName : null))
+                .ForMember(dest => dest.Lora2Type, opt => opt.MapFrom(src => src.Lora2 != null ? src.Lora2.Type : null))
                 .ReverseMap();
+
             CreateMap<Comment,CommentDTO>()
                 .ForMember(i => i.UserName, opt => opt.MapFrom(src => src.User.UserName))
                 .ReverseMap();
