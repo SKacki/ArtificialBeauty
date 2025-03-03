@@ -53,5 +53,14 @@ namespace WebAPI.Controllers
             return Ok(result);
         }
 
+        [HttpGet("GetModelData")]
+        [Produces("application/json")]
+        public async Task<IActionResult> GetModel([FromQuery] int modelId)
+        {
+            var result = _modelSvc.GetById(modelId);
+
+            return Ok(result);
+        }
+
     }
 }

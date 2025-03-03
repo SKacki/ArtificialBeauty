@@ -24,5 +24,12 @@ namespace WebAPI.Controllers
             return Ok();
         }
 
+        [HttpGet("GetOperationHistory")]
+        public async Task<IActionResult> GetOperationHistory([FromQuery] int userId)
+        {
+            var result = _operationSvc.GetUserOperations(userId);
+            return Ok(result);
+        }
+
     }
 }

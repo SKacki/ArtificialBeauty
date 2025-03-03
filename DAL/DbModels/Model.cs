@@ -22,5 +22,6 @@ namespace DAL
         public ICollection<Metadata> Lora2Metadata { get; set; }
         [ForeignKey("PublisherId")]
         public User? Publisher { get; set; }
+        public ICollection<ModelExample> Examples { get; set; }
     }
 }

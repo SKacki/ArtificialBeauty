@@ -4,6 +4,7 @@ using DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250302143144_ModelExamples")]
+    partial class ModelExamples
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -261,8 +264,7 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ImageId")
-                        .IsUnique();
+                    b.HasIndex("ImageId");
 
                     b.HasIndex("ModelId");
 
@@ -546,8 +548,8 @@ namespace DAL.Migrations
             modelBuilder.Entity("DAL.ModelExample", b =>
                 {
                     b.HasOne("DAL.Image", "Image")
-                        .WithOne("ExampleOfModel")
-                        .HasForeignKey("DAL.ModelExample", "ImageId")
+                        .WithMany("ExamplesOfModel")
+                        .HasForeignKey("ImageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -661,8 +663,7 @@ namespace DAL.Migrations
 
                     b.Navigation("Comments");
 
-                    b.Navigation("ExampleOfModel")
-                        .IsRequired();
+                    b.Navigation("ExamplesOfModel");
 
                     b.Navigation("Reactions");
 

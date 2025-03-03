@@ -18,7 +18,12 @@ namespace DAL.Repos
                 .ThenInclude(x => x.Reactions).ThenInclude(x => x.Image.Tips).ThenInclude(x=>x.Image.Comments)
                 .Where(x => x.CollectionId == collectionId).Select(x=>x.Image);
         public Metadata GetImageMetadata(int imageId) 
-            => Context.Metadata.Include(m => m.Image).SingleOrDefault(x => x.Id == imageId);
+            => Context.Metadata
+                .Include(x => x.Model)
+                .Include(x => x.Lora1)
+                .Include(x => x.Lora2)
+                .Include(m => m.Image)
+                .SingleOrDefault(x => x.Id == imageId);
         public Image GetImageData(int imageId) 
             => GetAll().SingleOrDefault(x => x.Id == imageId);
         public override IEnumerable<Image> GetAllAsIEnumerable() 
@@ -40,12 +45,13 @@ namespace DAL.Repos
 
         private IQueryable<Image> GetAll()
             => GetAllAsIQueryable()
-                .Include(x => x.Metadata).ThenInclude(x=>x.Model)
-                .Include(x=>x.Metadata).ThenInclude(x=>x.Lora1)
-                .Include(x => x.Metadata).ThenInclude(x => x.Lora2)
                 .Include(x=>x.User)
+                .Include(x=>x.ExampleOfModel)
                 .Include(x => x.Comments).ThenInclude(x => x.User)
                 .Include(x => x.Reactions)
                 .Include(x => x.Tips).ThenInclude(x=>x.Operation);
+
+        public IEnumerable<Comment> GetComments(int imageId)
+            => Context.Comments.Include(x=>x.User).Where(x=>x.ImageId == imageId);
     }
 }

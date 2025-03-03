@@ -10,5 +10,6 @@
         public Image GetImageData(int imageId);
         public void PostReaction(Reaction reaction);
         public void PostComment(Comment comment);
+        public IEnumerable<Comment> GetComments(int imageId);
     }
 }

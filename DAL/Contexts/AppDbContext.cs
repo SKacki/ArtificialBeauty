@@ -21,6 +21,7 @@ namespace DAL
         public DbSet<User> Users { get; set; }
         public DbSet<Tip> Tips { get; set; }
         public DbSet<OperationValue> OperationValues { get; set; }
+        public DbSet<ModelExample> ModelExamples { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

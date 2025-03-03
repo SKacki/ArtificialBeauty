@@ -13,7 +13,6 @@
         public int Dislikes { get; set; }
         public int Tips { get; set; }
         public int CommentsCount { get; set; }
-        public IEnumerable<CommentDTO> Comments { get; set; }
-        public MetadataDTO Metadata { get; set; }
+        public int? ExampleOfModel { get; set; }
     }
 }

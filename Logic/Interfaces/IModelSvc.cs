@@ -1,4 +1,5 @@
-﻿using Model.Models;
+﻿using DAL;
+using Model.Models;
 
 namespace Logic.Interfaces
 {
@@ -9,5 +10,6 @@ namespace Logic.Interfaces
         public IEnumerable<ModelDTO> GetCheckpoints();
         public IEnumerable<ModelDTO> GetAdditionalResources();
         public ModelDTO GetById(int modelId);
+        public IEnumerable<ModelExample> GetModelExamples();
     }
 }

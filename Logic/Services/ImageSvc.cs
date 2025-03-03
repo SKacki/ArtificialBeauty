@@ -11,6 +11,7 @@ namespace Logic
     {
         private readonly IMapper _mapper;
         private readonly IImageRepository _imageRepo;
+        private readonly IModelRepository _modelRepo;
         private readonly IModelSvc _modelSvc;
         private readonly IOperationSvc _operationSvc;
         private readonly string _repoPath;
@@ -18,11 +19,13 @@ namespace Logic
         public ImageSvc(
             IMapper mapper,
             IImageRepository imageRepository,
+            IModelRepository modelRepository,
             IModelSvc modelSvc,
             IOperationSvc operationSvc,
             IOptions<ImageRepositorySettings> options)
         {
             _imageRepo = imageRepository;
+            _modelRepo = modelRepository;
             _modelSvc = modelSvc;
             _operationSvc = operationSvc;
             _mapper = mapper;
@@ -62,6 +65,26 @@ namespace Logic
             return _mapper.Map<IEnumerable<ImageDTO>>(images);
         }
 
+        public IEnumerable<ImageDTO> GetFeaturedModels(IEnumerable<int>?ids)
+        {
+            var images = _imageRepo.GetAllAsIEnumerable()
+                            .Where(x => ids.Contains(x.Id))
+                            .OrderByDescending(x => x.UploadDate)
+                            .Take(20);
+
+            var models = _modelRepo.GetAllAsIEnumerable().ToList();
+
+            foreach (var item in images)
+            {
+                var model = models.FirstOrDefault(x => x.ID == item.ExampleOfModel.ModelId);
+                item.Description = $"[{model.Type}] {model.ModelName}";
+                item.User = model.Publisher;
+                item.UserId = (int)model.PublisherId; 
+            }
+
+            return _mapper.Map<IEnumerable<ImageDTO>>(images);
+        }
+
         public byte[] GetImage(Guid imageId)
         {
             var imagePath = Path.Combine(_repoPath, string.Concat(imageId.ToString(), ".png"));
@@ -98,5 +121,7 @@ namespace Logic
         {
             _imageRepo.PostComment(new(imageId, userId, comment));
         }
+        public IEnumerable<CommentDTO> GetComments(int imageId)
+            => _mapper.Map<IEnumerable<CommentDTO>>(_imageRepo.GetComments(imageId));
     }
 }

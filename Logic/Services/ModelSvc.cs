@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DAL;
 using DAL.Interfaces;
 using Logic.Interfaces;
 using Model.Models;
@@ -31,5 +32,8 @@ namespace Logic
             _mapper.Map<IEnumerable<model>, IEnumerable<ModelDTO>>(_modelRepo.GetModels());
         public IEnumerable<ModelDTO> GetAdditionalResources() =>
             _mapper.Map<IEnumerable<model>, IEnumerable<ModelDTO>>(_modelRepo.GetAdditionalResources());
+
+        public IEnumerable<ModelExample> GetModelExamples()
+            => _modelRepo.GetExampleImages();
     }
 }

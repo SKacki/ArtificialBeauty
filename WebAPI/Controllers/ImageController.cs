@@ -35,9 +35,16 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("GetImageData")]
-        public async Task<IActionResult> GetImageData(int imageId)
+        public async Task<IActionResult> GetImageData([FromQuery] int imageId)
         {
             var imgData = _imageSvc.GetImageData(imageId);
+            return Ok(imgData);
+        }
+
+        [HttpGet("GetImageMetaData")]
+        public async Task<IActionResult> GetImageMetaData([FromQuery]int imageId)
+        {
+            var imgData = _imageSvc.GetImageMetadata(imageId);
             return Ok(imgData);
         }
 
@@ -60,6 +67,13 @@ namespace WebAPI.Controllers
         {
             _imageSvc.PostComment(imageId, userId, comment);
             return Ok();
+        }
+        
+        [HttpGet("GetImageComments")]
+        public async Task<IActionResult> GetComments([FromQuery] int imageId)
+        {
+            var imgData = _imageSvc.GetComments(imageId);
+            return Ok(imgData);
         }
 
     }

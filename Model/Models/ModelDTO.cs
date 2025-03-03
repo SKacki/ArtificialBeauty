@@ -9,5 +9,6 @@
         public string? Trigger { get; set; }
         public string? Description { get; set; }
         public int? PublisherId { get; set; }
+        public UserDTO Publisher { get; set; }
     }
 }

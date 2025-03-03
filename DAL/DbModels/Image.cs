@@ -21,6 +21,7 @@ namespace DAL
         public ICollection<Reaction> Reactions { get; set; }
         public ICollection<ImagesCollection> Collections { get; set; }
         public ICollection<Comment> Comments { get; set; }
+        public ModelExample ExampleOfModel { get; set; }
 
     }
 }

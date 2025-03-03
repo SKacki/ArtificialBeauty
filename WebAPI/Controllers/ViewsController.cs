@@ -53,6 +53,12 @@ namespace WebAPI.Controllers
             return Ok(result);
         }
 
-
+        [HttpGet("GetfeatureModels")]
+        [Produces("application/json")]
+        public async Task<IActionResult> FeatureModelsView()
+        {
+            var result = _viewSvc.GetFeatureModelsView();
+            return Ok(result);
+        }
     }
 }

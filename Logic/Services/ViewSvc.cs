@@ -42,7 +42,18 @@ namespace Logic
             => metadataId>0 ? new GeneratorViewDTO(_generatorSvc.RemixImage(metadataId)) : new GeneratorViewDTO();
 
         public FeatureImagesView GetFeatureImagesView()
-            => new(_imageSvc.GetFeaturedImages());
-        
+        {
+            var images = _imageSvc.GetFeaturedImages();
+            return new(images);
+        }
+        public FeatureModelsView GetFeatureModelsView()
+        {
+            var examples = _modelSvc.GetModelExamples().Select(x => x.ImageId).ToList();
+            var images = _imageSvc.GetFeaturedModels(examples);
+            return new(images);
+        }
+
+        public UserViewDTO UserView(int userId)
+            => new(_userSvc.GetUserById(userId), _imageSvc.GetUserImages(userId)); 
     }
 }

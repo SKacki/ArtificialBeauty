@@ -21,13 +21,8 @@ namespace Logic
             _mapper = mapper;
         }
 
-        public UserDTO GetUserById(int id)
-        { 
-            var usr =_userRepo.GetById(id);
-            return _mapper.Map<User,UserDTO>(_userRepo.GetById(id));
-
-        }
-            //=> _mapper.Map<UserDTO>(_userRepo.GetById(id));
+        public UserDTO GetUserById(int id) 
+            => _mapper.Map<User,UserDTO>(_userRepo.GetById(id));
 
     }
 }
