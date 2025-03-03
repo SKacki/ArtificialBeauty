@@ -49,24 +49,68 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("PostReaction")]
-        public async Task<IActionResult> PostReaction([FromQuery]int imageId, [FromQuery] int userId,[FromQuery] int type)
+        public async Task<IActionResult> PostReaction([FromBody] ReactionDTO reaction)
         {
-            _imageSvc.PostReaction(imageId, userId, type);
-            return Ok();
+            try
+            {
+                var result = _imageSvc.PostReaction(reaction);
+
+                switch (result)
+                {
+                    case 0:
+                        return Ok(new { message = "OK" });
+                    case -1:
+                        return StatusCode(290, new { message = "Can't vote for your image ✋🏻" });
+                    case -2:
+                        return StatusCode(291, new { message = "Already voted for that image" });
+                    default:
+                        return BadRequest();
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost("TipCreator")]
-        public async Task<IActionResult> PostTip([FromQuery] int imageId, [FromQuery] int userId,[FromQuery] int amount)
+        public async Task<IActionResult> PostTip([FromBody] TipDTO tip)
         {
-            _operationSvc.TipImage(imageId, userId, amount);
-            return Ok();
+            try
+            {
+                var result = _operationSvc.TipImage(tip);
+
+                switch (result) 
+                {
+                    case 0:
+                        return Ok(new{ message = "OK" });
+                    case -1:
+                        return StatusCode(291, new { message = "You can't tip yourself 💸" });
+                    case -2:
+                        return StatusCode(290, new { message = "Insufficient funds 💸" });
+                    default:
+                        return BadRequest();
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost("PostComment")]
-        public async Task<IActionResult> PostComment([FromQuery] int imageId, [FromQuery] int userId, [FromQuery] string comment)
+        public async Task<IActionResult> PostComment([FromBody] CommentDTO comment)
         {
-            _imageSvc.PostComment(imageId, userId, comment);
-            return Ok();
+            try
+            {
+                _imageSvc.PostComment(comment);
+                return Ok(new { message = "OK" });
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
         
         [HttpGet("GetImageComments")]

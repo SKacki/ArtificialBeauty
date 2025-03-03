@@ -1,5 +1,6 @@
 ﻿using Logic.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Model.Models.Views;
 
 namespace WebAPI.Controllers
 {
@@ -50,6 +51,14 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> FeatureImagesView()
         {
             var result = _viewSvc.GetFeatureImagesView();
+            return Ok(result);
+        }
+
+        [HttpGet("GetImageView")]
+        [Produces("application/json")]
+        public async Task<IActionResult> GetImageView([FromQuery] string? searchTerm)
+        {
+            var result = _viewSvc.GetImagesView(searchTerm);
             return Ok(result);
         }
 

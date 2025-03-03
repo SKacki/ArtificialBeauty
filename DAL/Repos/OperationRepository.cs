@@ -22,8 +22,8 @@ namespace DAL.Repos
 
         public void TipImage(int userId, int imageId, int authorId, int amount)
         {
-            var operation1 = new OperationsHistory(userId, 7, -amount);//deduct from the user
-            var operation2 = new OperationsHistory(authorId, 1, amount);//add to the author
+            var operation1 = new OperationsHistory(userId, 1, -amount);//deduct from the user
+            var operation2 = new OperationsHistory(authorId, 6, amount);//add to the author
             base.Add(operation1);
             base.Add(operation2);
             Context.Tips.Add(new(imageId, operation2.Id));

@@ -24,24 +24,44 @@ namespace Logic
 
         public IEnumerable<OperationDTO> GetUserOperations(int userId)
             => _mapper.Map<IEnumerable<OperationDTO>>(_OperationRepo.GetUserOperations(userId));
-        public void TipImage(int imageId, int userId, int amount)
+        public int TipImage(TipDTO tip)
         {
-            var authorId = _imageRepo.GetImageData(imageId).UserId;
-            var balance = GetUserOperations(userId).Sum(x => x.Amount);
-            if (balance >= amount && authorId != userId)
+            try
             {
-                _OperationRepo.TipImage(userId, imageId, authorId, amount);
+                var authorId = _imageRepo.GetImageData(tip.ImageId).UserId;
+                var balance = GetUserOperations(tip.UserId).Sum(x => x.Amount);
+                if (authorId == tip.UserId)
+                    return -1;
+                if (balance < tip.Amount) 
+                    return -2;  
+
+                _OperationRepo.TipImage(tip.UserId, tip.ImageId, authorId, tip.Amount);
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Something went wrong");
             }
         }
 
-        public void ClaimDailyReward(int userId)
+        public int ClaimDailyReward(int userId)
         {
-            var lastReward = _OperationRepo.GetWhere(x=>x.UserId == userId && x.OperationId ==3).SingleOrDefault()?.OperationDate;
-
-            if (lastReward == null || lastReward <= DateTime.Now.AddDays(-1))
+            try
             {
-                var amount = _OperationRepo.GetOperationValue(3);
-                _OperationRepo.Add(new(userId,3,amount));
+                var status = 1;
+                var lastReward = _OperationRepo.GetWhere(x => x.UserId == userId && x.OperationId == 3).SingleOrDefault()?.OperationDate;
+
+                if (lastReward == null || lastReward <= DateTime.Now.AddDays(-1))
+                {
+                    var amount = _OperationRepo.GetOperationValue(3);
+                    _OperationRepo.Add(new(userId, 3, amount));
+                    return status;
+                }
+                else { return 0; }
+            }
+            catch (Exception ex) 
+            {
+                throw new Exception("Something went wrong here");
             }
         
         }

@@ -10,6 +10,7 @@ namespace Logic.Interfaces
         public GeneratorViewDTO GetGeneratorView(int metadataId);
         public FeatureModelsView GetFeatureModelsView();
         public UserViewDTO UserView(int userId);
-        FeatureImagesView GetFeatureImagesView();
+        public ImagesView GetFeatureImagesView();
+        public ImagesView GetImagesView(string? searchTerm);
     }
 }

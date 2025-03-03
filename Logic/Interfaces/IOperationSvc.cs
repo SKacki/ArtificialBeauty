@@ -5,8 +5,8 @@ namespace Logic.Interfaces
     public interface IOperationSvc
     {
         public IEnumerable<OperationDTO> GetUserOperations(int userId);
-        public void TipImage(int imageId, int userId, int amount);
-        public void ClaimDailyReward(int userId);
+        public int TipImage(TipDTO tip);
+        public int ClaimDailyReward(int userId);
         public void GiveInteractionRewards(int userId, int authorId);
     }
 }

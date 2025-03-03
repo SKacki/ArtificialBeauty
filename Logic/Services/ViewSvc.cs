@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Logic.Interfaces;
+using Microsoft.IdentityModel.Tokens;
 using Model.Models.Views;
 
 namespace Logic
@@ -41,11 +42,15 @@ namespace Logic
         public GeneratorViewDTO GetGeneratorView(int metadataId) 
             => metadataId>0 ? new GeneratorViewDTO(_generatorSvc.RemixImage(metadataId)) : new GeneratorViewDTO();
 
-        public FeatureImagesView GetFeatureImagesView()
+        public ImagesView GetFeatureImagesView()
         {
             var images = _imageSvc.GetFeaturedImages();
             return new(images);
         }
+        public ImagesView GetImagesView(string? searchTerm)
+            => searchTerm.IsNullOrEmpty() ? new(_imageSvc.GetAllImages()) : new(_imageSvc.SearchImages(searchTerm));
+
+
         public FeatureModelsView GetFeatureModelsView()
         {
             var examples = _modelSvc.GetModelExamples().Select(x => x.ImageId).ToList();

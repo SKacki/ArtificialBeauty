@@ -4,6 +4,8 @@ using Logic.Configs;
 using Logic.Interfaces;
 using Microsoft.Extensions.Options;
 using Model.Models;
+using DAL;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Logic
 {
@@ -65,6 +67,12 @@ namespace Logic
             return _mapper.Map<IEnumerable<ImageDTO>>(images);
         }
 
+        public IEnumerable<ImageDTO> SearchImages(string searchTerm) 
+            => _mapper.Map<IEnumerable<ImageDTO>>(_imageRepo.GetWhere(x => x.Description.Contains(searchTerm)));
+   
+        public IEnumerable<ImageDTO> GetAllImages()
+            => _mapper.Map<IEnumerable<ImageDTO>>(_imageRepo.GetAllAsIEnumerable());
+
         public IEnumerable<ImageDTO> GetFeaturedModels(IEnumerable<int>?ids)
         {
             var images = _imageRepo.GetAllAsIEnumerable()
@@ -95,7 +103,6 @@ namespace Logic
             }
             return File.ReadAllBytes(imagePath);
         }
-
         public byte[] GetImage(int imageId)
         {
             var imageRef = _imageRepo.GetById(imageId).Ref;
@@ -108,18 +115,29 @@ namespace Logic
             return File.ReadAllBytes(imagePath);
         }
 
-        public void PostReaction(int imageId, int userId, int type)
+        public int PostReaction(ReactionDTO reaction)
         {
-            var image =_imageRepo.GetWhere(x => x.Id == imageId).SingleOrDefault();
-            if (!image.Reactions.Any(x => x.UserId == userId) && image.UserId != userId)
+            try
             {
-                _imageRepo.PostReaction(new(type,imageId,userId));
-                _operationSvc.GiveInteractionRewards(userId, image.UserId);
+                var image = _imageRepo.GetWhere(x => x.Id == reaction.ImageId).SingleOrDefault();
+                if (image.UserId == reaction.UserId)
+                    return -1;
+                
+                if (image.Reactions.Any(x => x.UserId == reaction.UserId)) 
+                    return -2;
+                
+                _imageRepo.PostReaction(_mapper.Map<Reaction>(reaction));
+                _operationSvc.GiveInteractionRewards(reaction.UserId, image.UserId);
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Something went wrong here");
             }
         }
-        public void PostComment(int imageId, int userId, string comment)
+        public void PostComment(CommentDTO comment)
         {
-            _imageRepo.PostComment(new(imageId, userId, comment));
+            _imageRepo.PostComment(_mapper.Map<Comment>(comment));
         }
         public IEnumerable<CommentDTO> GetComments(int imageId)
             => _mapper.Map<IEnumerable<CommentDTO>>(_imageRepo.GetComments(imageId));
