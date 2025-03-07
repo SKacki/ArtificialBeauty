@@ -48,5 +48,20 @@ namespace WebAPI.Controllers
             return Ok(result);
         }
 
+        [HttpGet("GetUserByEmail")]
+        public async Task<IActionResult> GetUser([FromQuery] string email)
+        {
+            var result = _userSvc.GetUserByEmail(email);
+            return Ok(result);
+        }
+
+        [HttpPost("PostUser")]
+        public async Task<IActionResult> PostUser([FromBody] NewUserDTO user)
+        {
+             var usrId = await _userSvc.PostUser(user);
+
+            return Ok(usrId);
+        }
+
     }
 }

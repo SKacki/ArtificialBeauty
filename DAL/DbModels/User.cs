@@ -9,6 +9,7 @@ namespace DAL
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
+        public Guid? UId { get; set; }
         public string? UserName {  get; set; }
         public string? Email { get; set; }
         public DateTime JoinedDate { get; set; }

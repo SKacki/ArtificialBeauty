@@ -19,7 +19,6 @@ namespace DAL.Interfaces
         Task<IEnumerable<T>> GetWhereAsync(Expression<Func<T, bool>> predicate);
         #endregion
         #region synchronous methods
-        T GetById(long id);
         T GetById(int id);
         T Add(T entity, bool commit = true);
         void Update(T entity, bool commit = true);

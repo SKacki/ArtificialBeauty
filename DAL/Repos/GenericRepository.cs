@@ -49,7 +49,6 @@ namespace DAL.Repos
         public virtual IEnumerable<T> GetAllAsIEnumerable() => this.GetAllAsIQueryable().AsEnumerable();
         public virtual IQueryable<T> GetAllAsIQueryable() => _table.AsQueryable();
         public virtual async Task<IEnumerable<T>> GetAllAsync() => await _table.ToListAsync();
-        public  virtual T GetById(long id) => _table.Find(id);
         public virtual T GetById(int id) => _table.Find(id);
         public virtual Task<T> GetByIdAsync(long id) => _table.FindAsync(id).AsTask();
         public DbSet<T> GetDbSet()

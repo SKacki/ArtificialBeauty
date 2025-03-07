@@ -1,6 +1,6 @@
 ﻿namespace Model.Models
 {
-    public class GenerationRequestDTO
+    public class GenerationDataDTO
     {
         public int ModelId { get; set; }
         public int? Lora1Id { get; set; }

@@ -5,7 +5,6 @@ using Logic.Interfaces;
 using Microsoft.Extensions.Options;
 using Model.Models;
 using DAL;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Logic
 {

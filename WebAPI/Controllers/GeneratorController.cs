@@ -20,9 +20,10 @@ namespace WebAPI.Controllers
 
         [HttpPost("GenerateImage")]
         [Produces("application/json")]
-        public async Task<IActionResult> GenerateImage([FromBody] GenerationRequestDTO metadata)
+        public async Task<IActionResult> GenerateImage([FromBody] GenerationDataDTO metadata)
         {
-            return Ok("test");
+            var result = _generatorSvc.RequestGeneration(metadata, 1);
+            return Ok(result);
         }
 
         [HttpGet("HealthCheck")]

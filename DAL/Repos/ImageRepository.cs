@@ -23,7 +23,7 @@ namespace DAL.Repos
                 .Include(x => x.Lora1)
                 .Include(x => x.Lora2)
                 .Include(m => m.Image)
-                .SingleOrDefault(x => x.Id == imageId);
+                .SingleOrDefault(x => x.Image.Id == imageId);
         public Image GetImageData(int imageId) 
             => GetAll().SingleOrDefault(x => x.Id == imageId);
         public override IEnumerable<Image> GetAllAsIEnumerable() 

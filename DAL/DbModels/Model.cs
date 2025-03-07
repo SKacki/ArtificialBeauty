@@ -11,6 +11,7 @@ namespace DAL
         public int ID { get; set; }
         public string? Type { get; set; }
         public string? ModelName { get; set; }
+        public string? Path { get; set; }
         public DateTime? PublishedDate { get; set; }
         public string? Trigger { get; set; }
         public string? Description { get; set; }

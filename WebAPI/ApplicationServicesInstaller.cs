@@ -21,6 +21,7 @@ namespace WebAPI
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IImageRepository, ImageRepository>();
             services.AddScoped<IOperationRepository, OperationRepository>();
+            services.AddScoped<IAuthRepository, AuthRepository>();
 
             return services;
         }

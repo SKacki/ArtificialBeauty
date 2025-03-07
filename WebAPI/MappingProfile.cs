@@ -12,7 +12,9 @@ namespace WebAPI
             CreateMap<model, ModelDTO>()
                 .ReverseMap();
 
-            CreateMap<GenerationRequestDTO,MetadataDTO>()
+            CreateMap<User,NewUserDTO>().ReverseMap();
+
+            CreateMap<GenerationDataDTO,MetadataDTO>()
                 .ForMember(dest => dest.Lora1Weight, opt => opt.Equals(1))
                 .ForMember(dest => dest.Lora2Weight, opt => opt.Equals(1))
                 .ForMember(dest => dest.Height, opt => opt.Equals(1216))
