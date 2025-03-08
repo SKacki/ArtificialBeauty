@@ -22,8 +22,9 @@ namespace WebAPI.Controllers
         [Produces("application/json")]
         public async Task<IActionResult> GenerateImage([FromBody] GenerationDataDTO metadata)
         {
-            var result = _generatorSvc.RequestGeneration(metadata, 1);
-            return Ok(result);
+            var workflow = _generatorSvc.GetWorkflow(metadata);
+            var result = await _generatorSvc.AskComfyUI(workflow);
+            return result == null ? BadRequest("Something went wrong :(") :  File(result, "image/png");
         }
 
         [HttpGet("HealthCheck")]

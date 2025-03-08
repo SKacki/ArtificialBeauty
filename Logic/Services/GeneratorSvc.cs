@@ -32,21 +32,21 @@ namespace Logic
             _validator = new MetadataValidator();
         }
 
-        public string RequestGeneration(GenerationDataDTO metadata)
-        {            
-            var workflow = CreateBaseWorkflow(metadata);
-            if ((metadata.Lora1Id ?? 0) != 0 )
-                workflow = AddLora(workflow, (int)metadata.Lora1Id,1);
-            if((metadata.Lora2Id ?? 0) != 0)
-                workflow = AddLora(workflow, (int)metadata.Lora2Id,2);
+        //public string RequestGeneration(GenerationDataDTO metadata)
+        //{            
+        //    var workflow = CreateBaseWorkflow(metadata);
+        //    if ((metadata.Lora1Id ?? 0) != 0 )
+        //        workflow = AddLora(workflow, (int)metadata.Lora1Id,1);
+        //    if((metadata.Lora2Id ?? 0) != 0)
+        //        workflow = AddLora(workflow, (int)metadata.Lora2Id,2);
 
-            // Serialize back to JSON
-            var jsonStringOutput = JsonSerializer.Serialize(workflow, new JsonSerializerOptions { WriteIndented = false });
+        //    // Serialize back to JSON
+        //    var jsonStringOutput = JsonSerializer.Serialize(workflow, new JsonSerializerOptions { WriteIndented = false });
 
-            return jsonStringOutput;
-        }
+        //    return jsonStringOutput;
+        //}
 
-        public Dictionary<string, WorkflowNode> RequestGeneration(GenerationDataDTO metadata,int tst)
+        public Dictionary<string, WorkflowNode> GetWorkflow(GenerationDataDTO metadata)
         {
             var workflow = CreateBaseWorkflow(metadata);
             if ((metadata.Lora1Id ?? 0) != 0)
@@ -55,9 +55,13 @@ namespace Logic
                 if ((metadata.Lora2Id ?? 0) != 0)
                     workflow = AddLora(workflow, (int)metadata.Lora2Id, 2);
             }
+
             return workflow;
         }
-        public MetadataDTO RemixImage(int metadataId) => _imageSvc.GetImageMetadata(metadataId);
+        //public MetadataDTO RemixImage(int metadataId) => _imageSvc.GetImageMetadata(metadataId);
+
+        public async Task<byte[]?> AskComfyUI(Dictionary<string, WorkflowNode> workflow)
+            => await _client.PostAsync<byte[]>("fetch_image_from_comfy", workflow);
 
         private Dictionary<string, WorkflowNode> CreateBaseWorkflow(GenerationDataDTO metadata)
         {

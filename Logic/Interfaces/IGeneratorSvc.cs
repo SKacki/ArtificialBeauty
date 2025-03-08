@@ -5,9 +5,9 @@ namespace Logic.Interfaces
 {
     public interface IGeneratorSvc
     {
-        //public void RequestGeneration(MetadataDTO metadata);
-        public MetadataDTO RemixImage(int metadataId);
-        public string RequestGeneration(GenerationDataDTO metadata);
-        public Dictionary<string, WorkflowNode> RequestGeneration(GenerationDataDTO metadata, int tst);
+        //public MetadataDTO RemixImage(int metadataId);
+        //public string RequestGeneration(GenerationDataDTO metadata);
+        public Dictionary<string, WorkflowNode> GetWorkflow(GenerationDataDTO metadata);
+        public Task<byte[]?> AskComfyUI(Dictionary<string, WorkflowNode> workflow);
     }
 }
