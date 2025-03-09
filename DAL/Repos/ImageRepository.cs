@@ -53,5 +53,12 @@ namespace DAL.Repos
 
         public IEnumerable<Comment> GetComments(int imageId)
             => Context.Comments.Include(x=>x.User).Where(x=>x.ImageId == imageId);
+
+        public int SaveMetadata(Metadata metadata)
+        {
+            Context.Metadata.Add(metadata);
+            base.SaveChanges();
+            return metadata.Id;
+        }
     }
 }

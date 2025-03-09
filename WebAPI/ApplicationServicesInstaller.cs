@@ -23,6 +23,9 @@ namespace WebAPI
             services.AddScoped<IOperationRepository, OperationRepository>();
             services.AddScoped<IAuthRepository, AuthRepository>();
 
+            //inne
+            services.AddScoped<IGeneratorClient, MockClient>();
+
             return services;
         }
     }

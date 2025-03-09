@@ -11,5 +11,6 @@
         public void PostReaction(Reaction reaction);
         public void PostComment(Comment comment);
         public IEnumerable<Comment> GetComments(int imageId);
+        public int SaveMetadata(Metadata metadata);
     }
 }

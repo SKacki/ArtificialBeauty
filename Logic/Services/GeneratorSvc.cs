@@ -1,20 +1,17 @@
 ﻿using AutoMapper;
 using DAL.Interfaces;
 using Logic.Interfaces;
+using Microsoft.IdentityModel.Tokens;
 using Model.Models;
 using Model.Models.Workflows;
-using System.Text.Json;
 
 namespace Logic
 {
     public class GeneratorSvc : IGeneratorSvc
     {
-
-        private readonly IMapper _mapper;
-        private readonly IUserSvc _userSvc;
         private readonly IImageSvc _imageSvc;
         private readonly IModelRepository _modelRepo;
-        private readonly GeneratorClient _client;
+        private readonly IGeneratorClient _client;
         private readonly MetadataValidator _validator;
 
         public GeneratorSvc(
@@ -22,29 +19,13 @@ namespace Logic
             IUserSvc userSvc,
             IImageSvc imageSvc,
             IModelRepository modelRepository,
-            GeneratorClient genClient)
+            IGeneratorClient genClient)
         {
-            _userSvc = userSvc;
             _imageSvc = imageSvc;
             _modelRepo = modelRepository;
-            _mapper = mapper;
             _client = genClient;
             _validator = new MetadataValidator();
         }
-
-        //public string RequestGeneration(GenerationDataDTO metadata)
-        //{            
-        //    var workflow = CreateBaseWorkflow(metadata);
-        //    if ((metadata.Lora1Id ?? 0) != 0 )
-        //        workflow = AddLora(workflow, (int)metadata.Lora1Id,1);
-        //    if((metadata.Lora2Id ?? 0) != 0)
-        //        workflow = AddLora(workflow, (int)metadata.Lora2Id,2);
-
-        //    // Serialize back to JSON
-        //    var jsonStringOutput = JsonSerializer.Serialize(workflow, new JsonSerializerOptions { WriteIndented = false });
-
-        //    return jsonStringOutput;
-        //}
 
         public Dictionary<string, WorkflowNode> GetWorkflow(GenerationDataDTO metadata)
         {
@@ -58,10 +39,17 @@ namespace Logic
 
             return workflow;
         }
-        //public MetadataDTO RemixImage(int metadataId) => _imageSvc.GetImageMetadata(metadataId);
+        public MetadataDTO RemixImage(int metadataId) => _imageSvc.GetImageMetadata(metadataId);
 
-        public async Task<byte[]?> AskComfyUI(Dictionary<string, WorkflowNode> workflow)
-            => await _client.PostAsync<byte[]>("fetch_image_from_comfy", workflow);
+        public async Task<byte[]?> AskComfyUI(GenerationDataDTO metadata)
+        {
+            var data = ValidateGenerationData(metadata);
+            var workflow = GetWorkflow(data);
+            var img = await _client.PostWorkflowAsync<byte[]>("generate", workflow);
+            _imageSvc.SaveImage(img, data);
+
+            return img;
+        }
 
         private Dictionary<string, WorkflowNode> CreateBaseWorkflow(GenerationDataDTO metadata)
         {
@@ -70,7 +58,7 @@ namespace Logic
                 { "0", new ModelLoader(_modelRepo.GetById(metadata.ModelId).Path) },
                 { "3", new ClipTextEncode(true, metadata.PromptPoz) },
                 { "4", new ClipTextEncode(false, metadata.PromptNeg) },
-                { "5", new EmptyLatentImage() },
+                { "5", new EmptyLatentImage(metadata.Width,metadata.Height)},
                 { "6", new KSampler(metadata) },
                 { "7", new VAEDecode() },
                 { "8", new SaveImageWebsocket() }
@@ -91,6 +79,38 @@ namespace Logic
             }
 
             return workflow;
+        }
+        private GenerationDataDTO ValidateGenerationData(GenerationDataDTO data)
+        {
+            Random rnd = new();
+
+            if (data.ModelId == 0)
+                data.ModelId = 1;
+            if (data.Lora1Id == 0)
+                data.Lora1Id = null;
+            if (data.Lora2Id == 0) 
+                data.Lora2Id = null;
+            
+            data.Sampler = data.Sampler.ToLower();
+            data.Scheduler = data.Scheduler.ToLower();
+            if(data.Guidance<=0 || data.Guidance > 10) 
+                data.Guidance = 5;
+            if(data.Steps<=0 || data.Steps > 60)
+                data.Steps=20;
+            if(data.Seed == null || data.Seed == 0)
+                data.Seed = rnd.Next(int.MaxValue);
+            if (data.Height <= 0)
+                data.Height = 1024;
+            if (data.Width <= 0)
+                data.Width = 1024;
+            if (data.Description.IsNullOrEmpty())
+                data.Description = "MyImage";
+            return data;
+        }
+
+        public Task<int?> HealthCheck()
+        {
+            return  _client.GetAsync<int?>("HealthCheck");
         }
     }
 }

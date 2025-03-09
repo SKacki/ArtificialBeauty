@@ -50,7 +50,6 @@ namespace Logic
         public ImagesView GetImagesView(string? searchTerm)
             => searchTerm.IsNullOrEmpty() ? new(_imageSvc.GetAllImages()) : new(_imageSvc.SearchImages(searchTerm));
 
-
         public FeatureModelsView GetFeatureModelsView()
         {
             var examples = _modelSvc.GetModelExamples().Select(x => x.ImageId).ToList();

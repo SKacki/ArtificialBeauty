@@ -140,5 +140,32 @@ namespace Logic
         }
         public IEnumerable<CommentDTO> GetComments(int imageId)
             => _mapper.Map<IEnumerable<CommentDTO>>(_imageRepo.GetComments(imageId));
+
+        public void SaveImage(byte[] bytes, GenerationDataDTO data)
+        {
+            if (bytes == null || bytes.Length == 0)
+            { 
+                throw new ArgumentException("File data is empty.");
+            }
+            else
+            {
+                var fileName = Guid.NewGuid();
+                var path = Path.Combine(_repoPath,$"{fileName.ToString()}.png");
+                File.WriteAllBytes(path, bytes);
+
+                var metadata = _mapper.Map<GenerationDataDTO, Metadata>(data);
+                metadata.GenDate = DateTime.Now;
+
+                var metadataId = _imageRepo.SaveMetadata(metadata);
+                var image = new Image()
+                {
+                    Ref = fileName,
+                    MetadataId = metadataId,
+                    UserId = data.UserId,
+                    Description = data.Description
+                };
+                _imageRepo.Add(image);
+            }
+        }
     }
 }

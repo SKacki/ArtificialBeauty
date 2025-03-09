@@ -1,4 +1,5 @@
-﻿using Logic.Interfaces;
+﻿using DAL;
+using Logic.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Model.Models;
 
@@ -22,23 +23,30 @@ namespace WebAPI.Controllers
         [Produces("application/json")]
         public async Task<IActionResult> GenerateImage([FromBody] GenerationDataDTO metadata)
         {
-            var workflow = _generatorSvc.GetWorkflow(metadata);
-            var result = await _generatorSvc.AskComfyUI(workflow);
+            var result = await _generatorSvc.AskComfyUI(metadata);
             return result == null ? BadRequest("Something went wrong :(") :  File(result, "image/png");
         }
 
         [HttpGet("HealthCheck")]
         [Produces("application/json")]
-        public async Task<IActionResult> HealthCheck([FromQuery] int code)
+        public async Task<IActionResult> HealthCheck()
         {
-            var result = new MyClass() { Res = "OK", Code = code };
+            var result = await _generatorSvc.HealthCheck() ?? -1;   
+            return Ok(new MyClass() { Message = "OK", Code = result });
+        }
+
+        [HttpPost("GetWorkflow")]
+        [Produces("application/json")]
+        public async Task<IActionResult> GetWorkflow([FromBody] GenerationDataDTO metadata)
+        {
+            var result = _generatorSvc.GetWorkflow(metadata);
             return Ok(result);
         }
     }
 
     public class MyClass
     {
-        public string Res {  get; set; }
+        public string Message {  get; set; }
         public int Code { get; set; }
         
     }

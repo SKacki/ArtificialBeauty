@@ -52,6 +52,10 @@ namespace WebAPI
                 .ForMember(i => i.ExampleOfModel, opt => opt.MapFrom(src => src.ExampleOfModel.ModelId));
             CreateMap<Reaction, ReactionDTO>()
                 .ReverseMap();
+
+            CreateMap<GenerationDataDTO,Metadata>()
+                .ForMember(m => m.Lora1Weight, opt => opt.MapFrom(src => src.Lora1Id != null ? 1 : 0))
+                .ForMember(m => m.Lora2Weight, opt => opt.MapFrom(src => src.Lora2Id != null ? 1 : 0));
         }
     }
 }

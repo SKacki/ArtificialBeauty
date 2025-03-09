@@ -1,4 +1,5 @@
 using DAL;
+using Logic;
 using Logic.Configs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -39,7 +40,7 @@ builder.Services.AddIdentityApiEndpoints<IdentityUser>().AddEntityFrameworkStore
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.Configure<GeneratorServerSettings>(builder.Configuration.GetSection("GeneratorServerSettings"));
 builder.Services.Configure<ImageRepositorySettings>(builder.Configuration.GetSection("ImageRepositorySettings"));
-builder.Services.AddHttpClient<GeneratorClient>();
+builder.Services.AddHttpClient<IGeneratorClient>();
 builder.Services.AddApplicationServices();
 
 var app = builder.Build();

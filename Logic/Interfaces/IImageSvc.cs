@@ -18,5 +18,6 @@ namespace Logic.Interfaces
         public void PostComment(CommentDTO comment);
         public IEnumerable<ImageDTO> SearchImages(string searchTerm);
         public IEnumerable<ImageDTO> GetAllImages();
+        public void SaveImage(byte[] bytes, GenerationDataDTO data);
     }
 }

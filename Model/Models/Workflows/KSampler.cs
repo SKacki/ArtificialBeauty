@@ -4,9 +4,7 @@
     {
         public KSampler(GenerationDataDTO data) : base("KSampler", "KSampler") 
         {
-            Random rnd = new();
-
-            Inputs.Add("seed", data.Seed ?? rnd.Next(int.MaxValue));
+            Inputs.Add("seed", data.Seed);
             Inputs.Add("steps", data.Steps);
             Inputs.Add("cfg", data.Guidance);
             Inputs.Add("sampler_name", data.Sampler);
