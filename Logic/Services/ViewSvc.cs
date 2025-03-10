@@ -32,10 +32,11 @@ namespace Logic
         }
 
         public ModelViewDTO GetModelView(int modelId) 
-            => new(_modelSvc.GetById(modelId), _imageSvc.GetModelImages(modelId));
-    
+            => new(_modelSvc.GetById(modelId), _imageSvc.GetModelExamples(modelId), _imageSvc.GetModelImages(modelId));
+
         public UserViewDTO GetUserView(int userId) 
-            => new(_userSvc.GetUserById(userId),_imageSvc.GetUserImages(userId));
+            => new(_userSvc.GetUserById(userId),_imageSvc.GetUnpublished(userId), _imageSvc.GetUserImages(userId));
+
         public OperationsViewDTO GetOperationView(int userId)
             => new(_operationSvc.GetUserOperations(userId));
 
@@ -47,6 +48,7 @@ namespace Logic
             var images = _imageSvc.GetFeaturedImages();
             return new(images);
         }
+
         public ImagesView GetImagesView(string? searchTerm)
             => searchTerm.IsNullOrEmpty() ? new(_imageSvc.GetAllImages()) : new(_imageSvc.SearchImages(searchTerm));
 
@@ -58,6 +60,6 @@ namespace Logic
         }
 
         public UserViewDTO UserView(int userId)
-            => new(_userSvc.GetUserById(userId), _imageSvc.GetUserImages(userId)); 
+            => new(_userSvc.GetUserById(userId), _imageSvc.GetUnpublished(userId), _imageSvc.GetUserImages(userId)); 
     }
 }

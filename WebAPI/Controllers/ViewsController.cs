@@ -1,6 +1,5 @@
 ﻿using Logic.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Model.Models.Views;
 
 namespace WebAPI.Controllers
 {

@@ -56,7 +56,6 @@ namespace Logic
             => _mapper.Map<ImageDTO>(_imageRepo.GetImageData(imageId));
         public MetadataDTO GetImageMetadata(int imageId) 
             => _mapper.Map<MetadataDTO>(_imageRepo.GetImageMetadata(imageId));
-
         public IEnumerable<ImageDTO> GetFeaturedImages()
         {
             var images = _imageRepo.GetAllAsIEnumerable()
@@ -65,13 +64,10 @@ namespace Logic
                             .Take(10);
             return _mapper.Map<IEnumerable<ImageDTO>>(images);
         }
-
         public IEnumerable<ImageDTO> SearchImages(string searchTerm) 
             => _mapper.Map<IEnumerable<ImageDTO>>(_imageRepo.GetWhere(x => x.Description.Contains(searchTerm)));
-   
         public IEnumerable<ImageDTO> GetAllImages()
             => _mapper.Map<IEnumerable<ImageDTO>>(_imageRepo.GetAllAsIEnumerable());
-
         public IEnumerable<ImageDTO> GetFeaturedModels(IEnumerable<int>?ids)
         {
             var images = _imageRepo.GetAllAsIEnumerable()
@@ -91,7 +87,6 @@ namespace Logic
 
             return _mapper.Map<IEnumerable<ImageDTO>>(images);
         }
-
         public byte[] GetImage(Guid imageId)
         {
             var imagePath = Path.Combine(_repoPath, string.Concat(imageId.ToString(), ".png"));
@@ -113,7 +108,6 @@ namespace Logic
             }
             return File.ReadAllBytes(imagePath);
         }
-
         public int PostReaction(ReactionDTO reaction)
         {
             try
@@ -140,7 +134,6 @@ namespace Logic
         }
         public IEnumerable<CommentDTO> GetComments(int imageId)
             => _mapper.Map<IEnumerable<CommentDTO>>(_imageRepo.GetComments(imageId));
-
         public void SaveImage(byte[] bytes, GenerationDataDTO data)
         {
             if (bytes == null || bytes.Length == 0)
@@ -167,5 +160,11 @@ namespace Logic
                 _imageRepo.Add(image);
             }
         }
+        public IEnumerable<ImageDTO> GetModelExamples(int modelId) =>
+            _mapper.Map<IEnumerable<ImageDTO>>(_imageRepo.GetWhere(x => x.ExampleOfModel.ModelId == modelId));
+        public IEnumerable<ImageDTO> GetUnpublished(int userId) =>
+            _mapper.Map<IEnumerable<ImageDTO>>(_imageRepo.GetWhere(x => x.UserId == userId && x.UploadDate == null));
+
+
     }
 }

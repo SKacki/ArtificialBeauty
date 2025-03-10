@@ -19,5 +19,7 @@ namespace Logic.Interfaces
         public IEnumerable<ImageDTO> SearchImages(string searchTerm);
         public IEnumerable<ImageDTO> GetAllImages();
         public void SaveImage(byte[] bytes, GenerationDataDTO data);
+        public IEnumerable<ImageDTO> GetModelExamples(int modelId);
+        public IEnumerable<ImageDTO> GetUnpublished(int userId);
     }
 }
