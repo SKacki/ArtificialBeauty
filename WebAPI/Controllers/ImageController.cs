@@ -110,13 +110,43 @@ namespace WebAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        
+        [HttpPost("PublishImage")]
+        public async Task<IActionResult> PublishImage([FromBody] ImageDTO image)
+        {
+            try
+            {
+                var result = _imageSvc.PublishImage(image);
+                return result == -1 ? StatusCode(291, new { message = "Ok, but no award 💸" }) : Ok(new { message = "OK" });
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpGet("GetImageComments")]
         public async Task<IActionResult> GetComments([FromQuery] int imageId)
         {
             var imgData = _imageSvc.GetComments(imageId);
             return Ok(imgData);
         }
+
+        [HttpDelete("Remove")]
+        public async Task<IActionResult> RemoveImage([FromQuery] string imageId)
+        {
+            try
+            {
+                _imageSvc.RemoveImage(Guid.Parse(imageId));
+                return Ok(new {message = "OK"});
+            }
+            catch (Exception ex) 
+            { 
+                return BadRequest(ex);
+            }
+        }
+
+        
 
     }
 }

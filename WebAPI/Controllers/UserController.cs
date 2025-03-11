@@ -1,8 +1,6 @@
-﻿using DAL;
-using Logic.Interfaces;
+﻿using Logic.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Model.Models;
-using System.Net;
 
 namespace WebAPI.Controllers
 {

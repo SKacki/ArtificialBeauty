@@ -1,5 +1,4 @@
-﻿using DAL;
-using Logic.Interfaces;
+﻿using Logic.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Model.Models;
 
@@ -8,10 +7,8 @@ namespace WebAPI.Controllers
 
     [ApiController]
     [Route("api/[controller]")]
-    //public class HomeForecastController(ILogger<HomeForecastController> logger) : ControllerBase
     public class GeneratorController : ControllerBase
     {
-        //private readonly ILogger<HomeForecastController> _logger = logger;
         private readonly IGeneratorSvc _generatorSvc;
 
         public GeneratorController(IGeneratorSvc generatorSvc)
@@ -21,10 +18,21 @@ namespace WebAPI.Controllers
 
         [HttpPost("GenerateImage")]
         [Produces("application/json")]
-        public async Task<IActionResult> GenerateImage([FromBody] GenerationDataDTO metadata)
+        public async Task<IActionResult> GenerateImage([FromBody] GenerationDataDTO data)
         {
-            var result = await _generatorSvc.AskComfyUI(metadata);
-            return result == null ? BadRequest("Something went wrong :(") :  File(result, "image/png");
+            try
+            {
+                var result = await _generatorSvc.AskComfyUI(data);
+                return File( result, "image/png");
+            }
+            catch (ArgumentException)
+            {
+                return StatusCode(291, new { message = "Insufficient funds 💸" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Something went wrong :(");
+            }
         }
 
         [HttpGet("HealthCheck")]

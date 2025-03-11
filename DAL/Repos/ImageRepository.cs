@@ -60,5 +60,11 @@ namespace DAL.Repos
             base.SaveChanges();
             return metadata.Id;
         }
+
+        public void DeleteImage(Guid imageRef)
+        {
+            var image = _table.Include(x => x.Metadata).Include(x => x.Reactions).Include(x => x.Comments).FirstOrDefault(x=>x.Ref == imageRef);
+            base.Remove(image);
+        }
     }
 }

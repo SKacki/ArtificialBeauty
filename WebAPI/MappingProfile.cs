@@ -44,13 +44,14 @@ namespace WebAPI
                 .ForMember(u => u.Currency, opt => opt.MapFrom(src => src.OperationsHistory.Sum(x=> x.Amount)))
                 .ReverseMap();
             CreateMap<Image, ImageDTO>()
-                .ForMember(i => i.Tips, opt => opt.MapFrom(src => src.Tips != null ? src.Tips.Where(x=>x.Operation.OperationId == 6).Sum(x => x.Operation.Amount) : 0))
+                .ForMember(i => i.Tips, opt => opt.MapFrom(src => src.Tips != null ? src.Tips.Where(x => x.Operation.OperationId == 6).Sum(x => x.Operation.Amount) : 0))
                 .ForMember(i => i.Likes, opt => opt.MapFrom(src => src.Reactions != null ? src.Reactions.Count(x => x.Type == 1) : 0))
                 .ForMember(i => i.Dislikes, opt => opt.MapFrom(src => src.Reactions != null ? src.Reactions.Count(x => x.Type == -1) : 0))
                 .ForMember(i => i.CommentsCount, opt => opt.MapFrom(src => src.Comments != null ? src.Comments.Count() : 0))
                 .ForMember(i => i.UserName, opt => opt.MapFrom(src => src.User.UserName))
                 .ForMember(i => i.ExampleOfModel, opt => opt.MapFrom(src => src.ExampleOfModel.ModelId));
-            CreateMap<Reaction, ReactionDTO>()
+
+        CreateMap<Reaction, ReactionDTO>()
                 .ReverseMap();
 
             CreateMap<GenerationDataDTO,Metadata>()

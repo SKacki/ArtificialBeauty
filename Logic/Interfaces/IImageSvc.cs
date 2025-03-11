@@ -21,5 +21,7 @@ namespace Logic.Interfaces
         public void SaveImage(byte[] bytes, GenerationDataDTO data);
         public IEnumerable<ImageDTO> GetModelExamples(int modelId);
         public IEnumerable<ImageDTO> GetUnpublished(int userId);
+        public void RemoveImage(Guid imageRef);
+        public int PublishImage(ImageDTO imageDTO);
     }
 }

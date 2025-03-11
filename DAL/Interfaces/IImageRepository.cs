@@ -12,5 +12,6 @@
         public void PostComment(Comment comment);
         public IEnumerable<Comment> GetComments(int imageId);
         public int SaveMetadata(Metadata metadata);
+        public void DeleteImage(Guid imageRef);
     }
 }

@@ -5,6 +5,7 @@ using Logic.Interfaces;
 using Microsoft.Extensions.Options;
 using Model.Models;
 using DAL;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Logic
 {
@@ -67,7 +68,7 @@ namespace Logic
         public IEnumerable<ImageDTO> SearchImages(string searchTerm) 
             => _mapper.Map<IEnumerable<ImageDTO>>(_imageRepo.GetWhere(x => x.Description.Contains(searchTerm)));
         public IEnumerable<ImageDTO> GetAllImages()
-            => _mapper.Map<IEnumerable<ImageDTO>>(_imageRepo.GetAllAsIEnumerable());
+            => _mapper.Map<IEnumerable<ImageDTO>>(_imageRepo.GetAllAsIEnumerable().Where(x=>x.UploadDate != null));
         public IEnumerable<ImageDTO> GetFeaturedModels(IEnumerable<int>?ids)
         {
             var images = _imageRepo.GetAllAsIEnumerable()
@@ -89,7 +90,7 @@ namespace Logic
         }
         public byte[] GetImage(Guid imageId)
         {
-            var imagePath = Path.Combine(_repoPath, string.Concat(imageId.ToString(), ".png"));
+            var imagePath = Path.Combine(_repoPath, $"{imageId.ToString()}.png");
 
             if (!File.Exists(imagePath))
             {
@@ -163,8 +164,39 @@ namespace Logic
         public IEnumerable<ImageDTO> GetModelExamples(int modelId) =>
             _mapper.Map<IEnumerable<ImageDTO>>(_imageRepo.GetWhere(x => x.ExampleOfModel.ModelId == modelId));
         public IEnumerable<ImageDTO> GetUnpublished(int userId) =>
-            _mapper.Map<IEnumerable<ImageDTO>>(_imageRepo.GetWhere(x => x.UserId == userId && x.UploadDate == null));
+            _mapper.Map<IEnumerable<ImageDTO>>(_imageRepo.GetWhere(x => x.UserId == userId && x.UploadDate == null).OrderByDescending(x=>x.Id));
 
+        public void RemoveImage(Guid imageRef)
+        {
+            _imageRepo.DeleteImage(imageRef);
 
+            var imagePath = Path.Combine(_repoPath, $"{imageRef.ToString()}.png");
+
+            if (!File.Exists(imagePath))
+            {
+                throw new Exception("Image not found");
+            }
+            File.Delete(imagePath);
+        }
+
+        public int PublishImage(ImageDTO imageDTO)
+        {
+            imageDTO.UploadDate = DateTime.Now;
+
+            //automapper is being a bitch, so i'm doing it the old fashion way
+            var image = new Image()
+            {
+                Id = imageDTO.Id,
+                Ref = imageDTO.Ref,
+                Description = imageDTO.Description,
+                MetadataId = imageDTO.MetadataId,
+                UserId = imageDTO.UserId,
+                UploadDate = DateTime.Now
+            };
+
+            _imageRepo.Update(image);
+
+            return _operationSvc.AwardPostingReward(imageDTO.Id); ;
+        }
     }
 }

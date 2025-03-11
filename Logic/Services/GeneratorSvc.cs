@@ -12,19 +12,21 @@ namespace Logic
         private readonly IImageSvc _imageSvc;
         private readonly IModelRepository _modelRepo;
         private readonly IGeneratorClient _client;
-        private readonly MetadataValidator _validator;
+        private readonly IOperationSvc _operationSvc;
+        private readonly IMapper _mapper;
 
         public GeneratorSvc(
-            IMapper mapper,
-            IUserSvc userSvc,
             IImageSvc imageSvc,
             IModelRepository modelRepository,
-            IGeneratorClient genClient)
+            IOperationSvc operationSvc,
+            IGeneratorClient genClient,
+            IMapper mapper)
         {
             _imageSvc = imageSvc;
             _modelRepo = modelRepository;
             _client = genClient;
-            _validator = new MetadataValidator();
+            _operationSvc = operationSvc;
+            _mapper = mapper;
         }
 
         public Dictionary<string, WorkflowNode> GetWorkflow(GenerationDataDTO metadata)
@@ -41,14 +43,21 @@ namespace Logic
         }
         public MetadataDTO RemixImage(int metadataId) => _imageSvc.GetImageMetadata(metadataId);
 
-        public async Task<byte[]?> AskComfyUI(GenerationDataDTO metadata)
+        public async Task<byte[]?> AskComfyUI(GenerationDataDTO genData)
         {
-            var data = ValidateGenerationData(metadata);
+            if (_operationSvc.GenerationFee(_mapper.Map<MetadataDTO>(genData),genData.UserId) == -1)
+                throw new ArgumentException();
+
+            var data = ValidateGenerationData(genData);
             var workflow = GetWorkflow(data);
             var img = await _client.PostWorkflowAsync<byte[]>("generate", workflow);
             _imageSvc.SaveImage(img, data);
 
             return img;
+        }
+        public Task<int?> HealthCheck()
+        {
+            return _client.GetAsync<int?>("HealthCheck");
         }
 
         private Dictionary<string, WorkflowNode> CreateBaseWorkflow(GenerationDataDTO metadata)
@@ -64,7 +73,6 @@ namespace Logic
                 { "8", new SaveImageWebsocket() }
             };
         }
-
         private Dictionary<string, WorkflowNode> AddLora(Dictionary<string, WorkflowNode> workflow,int modelId, int index)
         {
             workflow.Add(index.ToString(), new LoraLoader(_modelRepo.GetById(modelId).Path,index));
@@ -108,9 +116,5 @@ namespace Logic
             return data;
         }
 
-        public Task<int?> HealthCheck()
-        {
-            return  _client.GetAsync<int?>("HealthCheck");
-        }
     }
 }
