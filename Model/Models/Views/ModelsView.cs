@@ -1,9 +1,9 @@
 ﻿namespace Model.Models.Views
 {
-    public class FeatureModelsView
+    public class ModelsView
     {
-        public FeatureModelsView() { }
-        public FeatureModelsView(IEnumerable<ImageDTO> images)
+        public ModelsView() { }
+        public ModelsView(IEnumerable<ImageDTO> images)
         {
             Images = images;
         }

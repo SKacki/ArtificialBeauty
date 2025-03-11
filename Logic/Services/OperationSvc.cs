@@ -50,7 +50,7 @@ namespace Logic
             try
             {
                 var status = 1;
-                var lastReward = _operationRepo.GetWhere(x => x.UserId == userId && x.OperationId == 3).SingleOrDefault()?.OperationDate;
+                var lastReward = _operationRepo.GetWhere(x => x.UserId == userId && x.OperationId == 3).OrderByDescending(x=>x.OperationDate).FirstOrDefault()?.OperationDate;
 
                 if (lastReward == null || lastReward <= DateTime.Now.AddDays(-1))
                 {

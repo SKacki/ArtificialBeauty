@@ -24,11 +24,11 @@ namespace WebAPI.Controllers
             try
             {
                 var status = _operationSvc.ClaimDailyReward(userId);
-                return status == 1 ? Ok() : StatusCode(801, new { message = "Already claimed today 💰" }); ;
+                return status == 1 ? Ok(new { message = "OK" }) : StatusCode(291, new { message = "Already claimed today 💰" }); ;
             }
             catch (Exception ex) 
             { 
-                return BadRequest(ex.Message);
+                return BadRequest(new { message = ex.Message });
             }
         }
 

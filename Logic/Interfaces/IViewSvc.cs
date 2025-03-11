@@ -8,9 +8,10 @@ namespace Logic.Interfaces
         public ModelViewDTO GetModelView(int modelId);
         public OperationsViewDTO GetOperationView(int userId);
         public GeneratorViewDTO GetGeneratorView(int metadataId);
-        public FeatureModelsView GetFeatureModelsView();
+        public ModelsView GetFeatureModelsView();
         public UserViewDTO UserView(int userId);
         public ImagesView GetFeatureImagesView();
         public ImagesView GetImagesView(string? searchTerm);
+        public ModelsView GetAllModelsView();
     }
 }

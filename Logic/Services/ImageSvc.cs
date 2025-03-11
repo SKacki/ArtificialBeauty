@@ -5,7 +5,6 @@ using Logic.Interfaces;
 using Microsoft.Extensions.Options;
 using Model.Models;
 using DAL;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Logic
 {
@@ -197,6 +196,25 @@ namespace Logic
             _imageRepo.Update(image);
 
             return _operationSvc.AwardPostingReward(imageDTO.Id); ;
+        }
+
+        public IEnumerable<ImageDTO> GetAllModels(IEnumerable<int>? ids)
+        {
+            var images = _imageRepo.GetAllAsIEnumerable()
+                            .Where(x => ids.Contains(x.Id))
+                            .OrderByDescending(x => x.UploadDate);
+
+            var models = _modelRepo.GetAllAsIEnumerable().ToList();
+
+            foreach (var item in images)
+            {
+                var model = models.FirstOrDefault(x => x.ID == item.ExampleOfModel.ModelId);
+                item.Description = $"[{model.Type}] {model.ModelName}";
+                item.User = model.Publisher;
+                item.UserId = (int)model.PublisherId;
+            }
+
+            return _mapper.Map<IEnumerable<ImageDTO>>(images);
         }
     }
 }

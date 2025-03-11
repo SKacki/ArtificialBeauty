@@ -23,5 +23,6 @@ namespace Logic.Interfaces
         public IEnumerable<ImageDTO> GetUnpublished(int userId);
         public void RemoveImage(Guid imageRef);
         public int PublishImage(ImageDTO imageDTO);
+        public IEnumerable<ImageDTO> GetAllModels(IEnumerable<int>? ids);
     }
 }

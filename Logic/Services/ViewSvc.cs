@@ -52,14 +52,27 @@ namespace Logic
         public ImagesView GetImagesView(string? searchTerm)
             => searchTerm.IsNullOrEmpty() ? new(_imageSvc.GetAllImages()) : new(_imageSvc.SearchImages(searchTerm));
 
-        public FeatureModelsView GetFeatureModelsView()
+        public ModelsView GetFeatureModelsView()
         {
             var examples = _modelSvc.GetModelExamples().Select(x => x.ImageId).ToList();
             var images = _imageSvc.GetFeaturedModels(examples);
             return new(images);
         }
+        public ModelsView GetAllModelsView()
+        {
+            var examples = _modelSvc.GetModelExamples().Select(x => x.ImageId).ToList();
+            var images = _imageSvc.GetAllModels(examples);
+            return new(images);
+        }
 
         public UserViewDTO UserView(int userId)
-            => new(_userSvc.GetUserById(userId), _imageSvc.GetUnpublished(userId), _imageSvc.GetUserImages(userId)); 
+            => new(_userSvc.GetUserById(userId), _imageSvc.GetUnpublished(userId), _imageSvc.GetUserImages(userId));
+
+        public ModelsView GetAllModels()
+        {
+            var examples = _modelSvc.GetModelExamples().Select(x => x.ImageId).ToList();
+            var images = _imageSvc.GetAllModels(examples);
+            return new(images);
+        }
     }
 }
