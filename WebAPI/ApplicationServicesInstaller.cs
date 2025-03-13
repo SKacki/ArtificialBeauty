@@ -2,6 +2,7 @@
 using DAL.Repos;
 using Logic;
 using Logic.Interfaces;
+using Microsoft.AspNetCore.Identity;
 
 namespace WebAPI
 {
@@ -24,6 +25,7 @@ namespace WebAPI
             services.AddScoped<IAuthRepository, AuthRepository>();
 
             //inne
+            services.AddScoped<UserManager<IdentityUser>, CustomUserManager>();
             services.AddScoped<IGeneratorClient, MockClient>();
 
             return services;

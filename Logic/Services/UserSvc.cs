@@ -31,13 +31,19 @@ namespace Logic
 
         public async Task<int> PostUser(NewUserDTO newUser)
         {
-            var uid = _authRepo.GetUID(newUser.Email);
             var user = _mapper.Map<User>(newUser);
-            user.UId = Guid.Parse(uid);
+            user.UId = Guid.Parse(newUser.Uid);
+            user.UserName = newUser.UserName.Substring(0, newUser.UserName.IndexOf("@"));
             user.JoinedDate = DateTime.Now;
             user.Bio = "Hi, i'm new here 👶";
             _userRepo.Add(user);
             return user.ID;
+        }
+
+        public async Task UpdateUser(UserDTO userDto)
+        {
+            var user = _mapper.Map<User>(userDto);
+            _userRepo.Update(user);
         }
 
 

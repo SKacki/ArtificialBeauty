@@ -1,10 +1,11 @@
 ﻿using Logic.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Model.Models;
 
 namespace WebAPI.Controllers
 {
-
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class ImageController : ControllerBase
@@ -18,13 +19,15 @@ namespace WebAPI.Controllers
             _operationSvc = operationSvc;   
         }
 
+        [AllowAnonymous]
         [HttpGet("GetImage")]
         public async Task<IActionResult> GetImage([FromQuery]Guid imageId)
         {
             var img = _imageSvc.GetImage(imageId);
             return File(img, "image/png");
         }
-
+        
+        [AllowAnonymous]
         [HttpGet("GetImageById")]
         public async Task<IActionResult> GetImageById([FromQuery] int imageId)
         {

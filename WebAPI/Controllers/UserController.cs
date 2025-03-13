@@ -1,10 +1,12 @@
 ﻿using Logic.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Model.Models;
+using System.Security.Claims;
 
 namespace WebAPI.Controllers
 {
-
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class UserController : ControllerBase
@@ -53,12 +55,22 @@ namespace WebAPI.Controllers
             return Ok(result);
         }
 
-        [HttpPost("PostUser")]
-        public async Task<IActionResult> PostUser([FromBody] NewUserDTO user)
+        [HttpPost("UpdateUser")]
+        public async Task<IActionResult> UpdateUser([FromBody] UserDTO user)
         {
-             var usrId = await _userSvc.PostUser(user);
+            await _userSvc.UpdateUser(user);
+            return Ok(new { message = "OK" });
+        }
 
-            return Ok(usrId);
+
+        [HttpGet("Test")]
+        public async Task<IActionResult> TestUser()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var email = User.FindFirst(ClaimTypes.Email)?.Value;
+            var username = User.Identity?.Name;
+
+            return Ok(new { userId, email, username });
         }
 
     }

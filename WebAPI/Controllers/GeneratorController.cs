@@ -1,10 +1,11 @@
 ﻿using Logic.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Model.Models;
 
 namespace WebAPI.Controllers
 {
-
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class GeneratorController : ControllerBase
