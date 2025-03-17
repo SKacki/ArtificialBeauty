@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Model.Models;
+using System.Security.Claims;
 
 namespace WebAPI.Controllers
 {
@@ -23,7 +24,8 @@ namespace WebAPI.Controllers
         {
             try
             {
-                var result = await _generatorSvc.AskComfyUI(data);
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                var result = await _generatorSvc.AskComfyUI(data, userId);
                 return File( result, "image/png");
             }
             catch (ArgumentException)

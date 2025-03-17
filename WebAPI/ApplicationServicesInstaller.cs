@@ -27,6 +27,7 @@ namespace WebAPI
             //inne
             services.AddScoped<UserManager<IdentityUser>, CustomUserManager>();
             services.AddScoped<IGeneratorClient, MockClient>();
+            services.AddScoped<IWebSocketSvc, WebSocketSvc>();
 
             return services;
         }

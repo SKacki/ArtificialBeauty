@@ -1,4 +1,5 @@
 ﻿using Logic.Configs;
+using Logic.Interfaces;
 using Microsoft.Extensions.Options;
 
 namespace Logic
@@ -18,7 +19,7 @@ namespace Logic
         }
         public async Task<T?> PostWorkflowAsync<T>(string endpoint, object data)
         {
-            var imagePath = Path.Combine(_repoPath, "c530668d-cb80-4807-acf3-3d5e4d727ebf.png");
+            var imagePath = Path.Combine(_repoPath, "16b27c8b-1b8c-4eb7-84cd-5cbb71c57ed9.png");
 
             if (!File.Exists(imagePath))
                 throw new FileNotFoundException($"Mock image file not found at {imagePath}");
