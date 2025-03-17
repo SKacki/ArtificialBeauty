@@ -34,9 +34,6 @@ namespace DAL.Migrations
                 table: "OperationValues",
                 column: "OperationId");
 
-            var sqlFile = Path.Combine("../DAL/TestDataScripts/DBScript_OperationValues.sql");
-            migrationBuilder.Sql(File.ReadAllText(sqlFile));
-
         }
 
         /// <inheritdoc />

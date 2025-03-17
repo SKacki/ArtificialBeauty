@@ -1,0 +1,1 @@
+﻿SELECT * FROM [ABDB].[dbo].[__EFMigrationsHistory];
