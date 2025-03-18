@@ -11,7 +11,8 @@ namespace Logic
     {
         private readonly IImageSvc _imageSvc;
         private readonly IModelRepository _modelRepo;
-        private readonly IGeneratorClient _client;
+        //private readonly IGeneratorClient _client;
+        private readonly IWebSocketSvc _websocketSvc;
         private readonly IOperationSvc _operationSvc;
         private readonly IMapper _mapper;
 
@@ -19,12 +20,14 @@ namespace Logic
             IImageSvc imageSvc,
             IModelRepository modelRepository,
             IOperationSvc operationSvc,
-            IGeneratorClient genClient,
+            //IGeneratorClient genClient,
+            IWebSocketSvc websocketSvc,
             IMapper mapper)
         {
             _imageSvc = imageSvc;
             _modelRepo = modelRepository;
-            _client = genClient;
+            //_client = genClient;
+            _websocketSvc = websocketSvc;
             _operationSvc = operationSvc;
             _mapper = mapper;
         }
@@ -43,21 +46,22 @@ namespace Logic
         }
         public MetadataDTO RemixImage(int metadataId) => _imageSvc.GetImageMetadata(metadataId);
 
-        public async Task<byte[]?> AskComfyUI(GenerationDataDTO genData)
+        public async Task<byte[]?> AskComfyUI(GenerationDataDTO genData, string uid)
         {
             if (_operationSvc.GenerationFee(_mapper.Map<MetadataDTO>(genData),genData.UserId) == -1)
                 throw new ArgumentException();
 
             var data = ValidateGenerationData(genData);
             var workflow = GetWorkflow(data);
-            var img = await _client.PostWorkflowAsync<byte[]>("generate", workflow);
+            var img = await _websocketSvc.FetchImageFromComfyAsync(workflow,uid);
+            //var img2 = await _client.PostWorkflowAsync<byte[]>("generate", workflow);
             _imageSvc.SaveImage(img, data);
 
             return img;
         }
-        public Task<int?> HealthCheck()
+        public async Task<int?> HealthCheck()
         {
-            return _client.GetAsync<int?>("HealthCheck");
+            return await new Task<int>(()=> 0); //_client.GetAsync<int?>("HealthCheck");
         }
 
         private Dictionary<string, WorkflowNode> CreateBaseWorkflow(GenerationDataDTO metadata)

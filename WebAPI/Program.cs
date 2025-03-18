@@ -1,6 +1,6 @@
 using DAL;
-using Logic;
 using Logic.Configs;
+using Logic.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WebAPI;

@@ -97,6 +97,14 @@ namespace Logic
             }
             return File.ReadAllBytes(imagePath);
         }
+        public byte[] GetProfilePicture(Guid imageId)
+        {
+            var imagePath = Path.Combine(_repoPath, "profilePics", $"{imageId.ToString()}.png");
+
+            if (!File.Exists(imagePath))
+                return File.ReadAllBytes(Path.Combine(_repoPath, "profilePics", "default-profile.png"));
+            return File.ReadAllBytes(imagePath);
+        }
         public byte[] GetImage(int imageId)
         {
             var imageRef = _imageRepo.GetById(imageId).Ref;
@@ -160,11 +168,24 @@ namespace Logic
                 _imageRepo.Add(image);
             }
         }
+        public Guid SaveProfilePic(byte[] bytes)
+        {
+            if (bytes == null || bytes.Length == 0)
+            {
+                throw new ArgumentException("File data is empty.");
+            }
+            else
+            {
+                var fileName = Guid.NewGuid();
+                var path = Path.Combine(_repoPath, "profilePics", $"{fileName.ToString()}.png");
+                File.WriteAllBytes(path, bytes);
+                return fileName;
+            }
+        }
         public IEnumerable<ImageDTO> GetModelExamples(int modelId) =>
             _mapper.Map<IEnumerable<ImageDTO>>(_imageRepo.GetWhere(x => x.ExampleOfModel.ModelId == modelId));
         public IEnumerable<ImageDTO> GetUnpublished(int userId) =>
             _mapper.Map<IEnumerable<ImageDTO>>(_imageRepo.GetWhere(x => x.UserId == userId && x.UploadDate == null).OrderByDescending(x=>x.Id));
-
         public void RemoveImage(Guid imageRef)
         {
             _imageRepo.DeleteImage(imageRef);
@@ -177,7 +198,6 @@ namespace Logic
             }
             File.Delete(imagePath);
         }
-
         public int PublishImage(ImageDTO imageDTO)
         {
             imageDTO.UploadDate = DateTime.Now;
@@ -195,9 +215,8 @@ namespace Logic
 
             _imageRepo.Update(image);
 
-            return _operationSvc.AwardPostingReward(imageDTO.Id); ;
+            return _operationSvc.AwardPostingReward(imageDTO.UserId); ;
         }
-
         public IEnumerable<ImageDTO> GetAllModels(IEnumerable<int>? ids)
         {
             var images = _imageRepo.GetAllAsIEnumerable()

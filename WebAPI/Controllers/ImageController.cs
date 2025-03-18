@@ -34,6 +34,13 @@ namespace WebAPI.Controllers
             var img = _imageSvc.GetImage(imageId);
             return File(img, "image/png");
         }
+        [AllowAnonymous]
+        [HttpGet("GetProfilePic")]
+        public async Task<IActionResult> GetProfilePic([FromQuery] Guid imageId)
+        {
+            var img = _imageSvc.GetProfilePicture(imageId);
+            return File(img, "image/png");
+        }
 
         [HttpGet("GetImageData")]
         public async Task<IActionResult> GetImageData([FromQuery] int imageId)

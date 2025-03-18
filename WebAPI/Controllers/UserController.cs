@@ -62,6 +62,41 @@ namespace WebAPI.Controllers
             return Ok(new { message = "OK" });
         }
 
+        [HttpPost("FollowUser")]
+        public async Task<IActionResult> FollowUser([FromBody] FollowDTO follow)
+        {
+            var userUid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userId = _userSvc.GetUserByUid(Guid.Parse(userUid)).Id;
+            if (userId != follow.FollowerId)
+                return Unauthorized("You don't have permission for this operation");
+            
+            try
+            {
+                await _userSvc.FollowUser(follow);
+                return Ok(new { message = "OK" });
+            }
+            catch (Exception ex) {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("upload-profile")]
+        public async Task<IActionResult> UploadProfilePicture(IFormFile profilePic)
+        {
+            byte[] bytes = null;
+            if (profilePic == null || profilePic.Length == 0)
+                return BadRequest("No file uploaded");
+
+            var userId = _userSvc.GetUserByUid(Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value)).Id;
+            using (var memoryStream = new MemoryStream())
+            {
+                await profilePic.CopyToAsync(memoryStream);
+                bytes= memoryStream.ToArray();
+            }
+
+            _userSvc.UpdateProfilePic(bytes, userId);
+            return Ok();
+        }
 
         [HttpGet("Test")]
         public async Task<IActionResult> TestUser()

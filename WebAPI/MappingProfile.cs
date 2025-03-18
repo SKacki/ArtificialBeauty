@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DAL;
+using Model;
 using Model.Models;
 using model = DAL.Model;
 
@@ -42,6 +43,7 @@ namespace WebAPI
                 .ForMember(u => u.FollowersCount, opt => opt.MapFrom(src => src.Followers.Count()))
                 .ForMember(u => u.FollowingCount, opt => opt.MapFrom(src => src.Following.Count()))
                 .ForMember(u => u.Currency, opt => opt.MapFrom(src => src.OperationsHistory.Sum(x=> x.Amount)))
+                .ForMember(u => u.ProfilePic, opt => opt.MapFrom(src => src.Picture.Ref))
                 .ReverseMap();
             CreateMap<Image, ImageDTO>()
                 .ForMember(i => i.Tips, opt => opt.MapFrom(src => src.Tips != null ? src.Tips.Where(x => x.Operation.OperationId == 6).Sum(x => x.Operation.Amount) : 0))
@@ -51,12 +53,13 @@ namespace WebAPI
                 .ForMember(i => i.UserName, opt => opt.MapFrom(src => src.User.UserName))
                 .ForMember(i => i.ExampleOfModel, opt => opt.MapFrom(src => src.ExampleOfModel.ModelId));
 
-        CreateMap<Reaction, ReactionDTO>()
+            CreateMap<Reaction, ReactionDTO>()
                 .ReverseMap();
 
             CreateMap<GenerationDataDTO,Metadata>()
                 .ForMember(m => m.Lora1Weight, opt => opt.MapFrom(src => src.Lora1Id != null ? 1 : 0))
                 .ForMember(m => m.Lora2Weight, opt => opt.MapFrom(src => src.Lora2Id != null ? 1 : 0));
+            CreateMap<Follower,FollowDTO>().ReverseMap();
         }
     }
 }
