@@ -13,7 +13,8 @@ namespace Logic
         public GeneratorClient(HttpClient httpClient, IOptions<GeneratorServerSettings> options)
         {
             _httpClient = httpClient;
-            _httpClient.BaseAddress = new Uri(options.Value.BaseUrl);
+            //_httpClient.BaseAddress = new Uri(options.Value.BaseUrl);
+            _httpClient.BaseAddress = new Uri("http://127.0.0.1:8000");
         }
 
         public async Task<T?> GetAsync<T>(string endpoint)

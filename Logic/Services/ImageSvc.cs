@@ -59,9 +59,17 @@ namespace Logic
         public IEnumerable<ImageDTO> GetFeaturedImages()
         {
             var images = _imageRepo.GetAllAsIEnumerable()
-                            .Where(x => x.UploadDate != null)
-                            .OrderByDescending(x => x.UploadDate)
-                            .Take(10);
+                .Where(x => x.UploadDate != null)
+                .Select(x => new
+                {
+                    Image = x,
+                    ReactionCount = x.Reactions.Count(r => r.Type == 1)
+                })
+                .OrderByDescending(x => x.ReactionCount)
+                .ThenByDescending(x => x.Image.UploadDate)
+                .Where(x => x.Image.UploadDate <= DateTime.Today && x.Image.UploadDate <= DateTime.Today.AddDays(-30))
+                .Take(20)
+                .Select(x => x.Image);
             return _mapper.Map<IEnumerable<ImageDTO>>(images);
         }
         public IEnumerable<ImageDTO> SearchImages(string searchTerm) 

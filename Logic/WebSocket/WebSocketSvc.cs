@@ -23,16 +23,17 @@ namespace Logic
         public async Task<byte[]> FetchImageFromComfyAsync(Dictionary<string, WorkflowNode> workflow, string uid)
         {
             SetClientId(uid);
-            using var ws = new ClientWebSocket();
-            await ws.ConnectAsync(new Uri($"ws://{_serverAddress}/ws?clientId={_clientId}"), CancellationToken.None);
-
             string workflowJson = JsonSerializer.Serialize(workflow);
             using JsonDocument doc = JsonDocument.Parse(workflowJson);
 
-            byte[] images = await GetImagesAsync(ws, doc.RootElement);
 
-            await ws.CloseAsync(WebSocketCloseStatus.NormalClosure, "Done", CancellationToken.None);
-            return images;
+            using (var ws = new ClientWebSocket())
+            {
+                await ws.ConnectAsync(new Uri($"ws://{_serverAddress}/ws?clientId={_clientId}"), CancellationToken.None);
+                byte[] images = await GetImagesAsync(ws, doc.RootElement);
+                await ws.CloseAsync(WebSocketCloseStatus.NormalClosure, "Done", CancellationToken.None);
+                return images;
+            }
         }
         private async Task<string> QueuePromptAsync(string workflowJson)
         {
@@ -55,40 +56,41 @@ namespace Logic
             string promptId = await QueuePromptAsync(prompt.ToString());
             byte[] outputImage = null;
             string currentNode = "";
+            List<byte> imageData = new List<byte>();
 
             var buffer = new byte[4096];
-
-            while (ws.State == WebSocketState.Open)
-            {
-                var result = await ws.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-                if (result.MessageType == WebSocketMessageType.Text)
+                while (ws.State == WebSocketState.Open)
                 {
-                    string message = Encoding.UTF8.GetString(buffer, 0, result.Count);
-                    using JsonDocument doc = JsonDocument.Parse(message);
-                    var messageType = doc.RootElement.GetProperty("type").GetString();
-
-                    if (messageType == "executing")
+                    var result = await ws.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+                    if (result.MessageType == WebSocketMessageType.Text)
                     {
-                        var data = doc.RootElement.GetProperty("data");
-                        if (data.GetProperty("prompt_id").GetString() == promptId)
+                        string message = Encoding.UTF8.GetString(buffer, 0, result.Count);
+                        using JsonDocument doc = JsonDocument.Parse(message);
+                        var messageType = doc.RootElement.GetProperty("type").GetString();
+
+                        if (messageType == "executing")
                         {
-                            if (data.GetProperty("node").ValueKind == JsonValueKind.Null)
-                                break;
-                            else
+                            var data = doc.RootElement.GetProperty("data");
+                            if (data.GetProperty("prompt_id").GetString() == promptId)
                             {
-                                int nodeNumber = data.GetProperty("node").GetInt32();
-                                currentNode = prompt.EnumerateArray().ElementAt(nodeNumber).GetProperty("class_type").GetString();
+                                if (data.GetProperty("node").ValueKind == JsonValueKind.Null)
+                                    break;
+                                else
+                                {
+                                    string nodeValue = data.GetProperty("node").GetString();
+                                    currentNode = prompt.GetProperty(nodeValue).GetProperty("class_type").GetString();
+                                }
                             }
                         }
                     }
+                    else if (currentNode == "SaveImageWebsocket")
+                    {
+                        //outputImage = buffer.ToArray();
+                        imageData.AddRange(buffer.Take(result.Count));
                 }
-                else if (currentNode == "SaveImageWebsocket")
-                {
-                    outputImage = buffer.Skip(8).ToArray();
                 }
-            }
 
-            return outputImage;
+            return imageData.ToArray(); //outputImage;
         }
         private void SetClientId(string uid) => _clientId = uid;
 

@@ -11,7 +11,7 @@ namespace Logic
     {
         private readonly IImageSvc _imageSvc;
         private readonly IModelRepository _modelRepo;
-        //private readonly IGeneratorClient _client;
+        private readonly IGeneratorClient _client;
         private readonly IWebSocketSvc _websocketSvc;
         private readonly IOperationSvc _operationSvc;
         private readonly IMapper _mapper;
@@ -20,13 +20,13 @@ namespace Logic
             IImageSvc imageSvc,
             IModelRepository modelRepository,
             IOperationSvc operationSvc,
-            //IGeneratorClient genClient,
+            IGeneratorClient genClient,
             IWebSocketSvc websocketSvc,
             IMapper mapper)
         {
             _imageSvc = imageSvc;
             _modelRepo = modelRepository;
-            //_client = genClient;
+            _client = genClient;
             _websocketSvc = websocketSvc;
             _operationSvc = operationSvc;
             _mapper = mapper;
@@ -54,7 +54,7 @@ namespace Logic
             var data = ValidateGenerationData(genData);
             var workflow = GetWorkflow(data);
             var img = await _websocketSvc.FetchImageFromComfyAsync(workflow,uid);
-            //var img2 = await _client.PostWorkflowAsync<byte[]>("generate", workflow);
+            //var img = await _client.PostWorkflowAsync<byte[]>("generate", workflow);
             _imageSvc.SaveImage(img, data);
 
             return img;
